@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <title>Czat</title>
+  <script>
+    // GitHub Pages nie obsługuje ścieżek typu /karolina, więc trafiają tutaj.
+    // Przekierowujemy na stronę główną z ?imie=karolina, a index.html przywraca ładny adres.
+    (function () {
+      var segs = location.pathname.split("/").filter(Boolean);
+      // Strona projektu na *.github.io ma w adresie nazwę repo: /date_poland/karolina
+      var keep = /\.github\.io$/.test(location.hostname) && segs.length > 1 ? 1 : 0;
+      var base = "/" + segs.slice(0, keep).join("/") + (keep ? "/" : "");
+      var name = segs[keep] ? decodeURIComponent(segs[keep]) : "";
+      location.replace(base + (name ? "?imie=" + encodeURIComponent(name) : "") + location.hash);
+    })();
+  </script>
+</head>
+<body></body>
+</html>

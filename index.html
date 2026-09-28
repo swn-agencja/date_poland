@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#e8335d" />
+  <title>Czat</title>
+  <script>
+    // Powrót z 404.html (GitHub Pages): ?imie=karolina -> ładny adres /karolina
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var n = p.get("imie");
+      if (n) {
+        p.delete("imie");
+        var q = p.toString();
+        history.replaceState(null, "", location.pathname.replace(/\/?$/, "/") + encodeURIComponent(n) + (q ? "?" + q : "") + location.hash);
+        window.__CHAT_NAME__ = n;
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="chat-header">
+      <div class="avatar" id="avatar"><span id="avatar-initial"></span></div>
+      <div class="who">
+        <div class="name" id="name"></div>
+        <div class="status"><span class="dot"></span><span id="status-text">online</span></div>
+      </div>
+    </header>
+
+    <main class="messages" id="messages" aria-live="polite">
+      <div class="day-sep"><span>Dzisiaj</span></div>
+    </main>
+
+    <form class="composer" id="composer" autocomplete="off">
+      <input id="input" type="text" placeholder="Napisz wiadomość..." maxlength="500" enterkeyhint="send" />
+      <button type="submit" id="send" aria-label="Wyślij wiadomość" disabled>
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </form>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
