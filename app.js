@@ -186,7 +186,13 @@
     var age = profile.age || min + Math.floor(Math.random() * (max - min + 1));
     var text = (cfg.replyMessage || "O fajnie, ja {wiek}").replace(/\{wiek\}/g, ageText(age));
     say(text, cfg.replyTypingMs || 1500, function () {
-      setTimeout(showCta, cfg.ctaDelayMs || 0);
+      var follow = cfg.followUpMessages && cfg.followUpMessages.length ? pick(cfg.followUpMessages) : null;
+      if (!follow) return setTimeout(showCta, cfg.ctaDelayMs || 0);
+      setTimeout(function () {
+        say(follow.replace(/\{imie\}/g, name), cfg.followUpTypingMs || 2200, function () {
+          setTimeout(showCta, cfg.ctaDelayMs || 0);
+        });
+      }, 400);
     });
   }
 

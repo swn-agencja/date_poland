@@ -39,6 +39,20 @@ window.CHAT_CONFIG = {
   ageMin: 20,
   ageMax: 25,
 
+  // Druga wiadomość zaraz po odpowiedzi z wiekiem – losowana jedna z listy.
+  // Dopiero po niej pojawia się przycisk "Kontynuuj rozmowę".
+  followUpMessages: [
+    "Kogo szukasz 🙂 związek na poważnie?",
+    "A czego tu szukasz? Czegoś na poważnie czy luźno 😉?",
+    "Powiedz, szukasz związku czy raczej luźnej znajomości? 🙂",
+    "Kogo szukasz? Bo ja chyba kogoś na dłużej 🙈",
+    "A ty szukasz czegoś na poważnie? 🙂",
+    "Szukasz związku czy bardziej luźnego poznania się? 😊",
+    "Ciekawa jestem, kogo szukasz 🙂 ktoś na stałe?",
+    "Czego szukasz na portalu? Związku na poważnie? 🙂",
+  ],
+  followUpTypingMs: 2200,
+
   // Po ilu ms od odpowiedzi pokazać przycisk "Kontynuuj rozmowę".
   ctaDelayMs: 2000,
   ctaInfo: "{imie} czeka na Twoją odpowiedź 💬",
