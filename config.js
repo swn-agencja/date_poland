@@ -39,10 +39,16 @@ window.CHAT_CONFIG = {
   ageMin: 20,
   ageMax: 25,
 
-  // Dokąd przekierować po odpowiedzi (null = bez przekierowania)
-  // i po ilu ms od jej wyświetlenia.
-  redirectUrl: "https://radarkobiet.pl/link/3107/37989837",
-  redirectDelayMs: 2000,
+  // Po ilu ms od odpowiedzi pokazać przycisk "Kontynuuj rozmowę".
+  ctaDelayMs: 2000,
+  ctaInfo: "{imie} czeka na Twoją odpowiedź 💬",
+  ctaText: "Kontynuuj rozmowę",
+
+  // Link pod przyciskiem zależy od wieku wyłapanego z wiadomości użytkownika.
+  // Wiek >= ageThreshold -> linkOlder, młodszy albo nieznany -> linkYounger.
+  ageThreshold: 45,
+  linkOlder: "https://radarkobiet.pl/link/3806/37989837",
+  linkYounger: "https://radarkobiet.pl/link/3107/37989837",
 
   // Ustawienia dla konkretnych imion (klucz małymi literami).
   // Pola: displayName, age, city, photo, firstMessages – wszystkie opcjonalne.
