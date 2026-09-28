@@ -2,13 +2,6 @@
 //  KONFIGURACJA – tu zmieniasz wszystko bez grzebania w kodzie
 // ============================================================
 window.CHAT_CONFIG = {
-  // Gdzie przekierować użytkownika po wysłaniu pierwszej wiadomości.
-  // Ustaw na null, żeby po wysłaniu nic się nie działo.
-  redirectUrl: "https://pl.wikipedia.org/",
-
-  // Ile ms czekać po wysłaniu wiadomości zanim nastąpi przekierowanie.
-  redirectDelayMs: 1500,
-
   // Imię używane, gdy ktoś wejdzie na stronę główną (bez /imie).
   defaultName: "Ola",
 
@@ -18,13 +11,38 @@ window.CHAT_CONFIG = {
   // Pierwsze wiadomości – losowana jest jedna z listy.
   // {imie} zostanie zamienione na imię z adresu (np. /karolina -> Karolina).
   firstMessages: [
-    "Hej, co tam? 😊",
-    "Cześć, jestem {imie} 👋",
-    "Cześć, co słychać?",
-    "Hejka! Nudzę się trochę, pogadamy? 🙈",
-    "Hej :) widzę, że jesteś online",
-    "Siemka, jak minął dzień?",
+    "Hejka, jestem {imie}, a ty? Ile masz lat 🙂?",
+    "Hej! Tu {imie} 😊 a ty jak masz na imię? Ile masz lat?",
+    "Cześć, jestem {imie} 🙂 a ty? Ile masz lat?",
+    "Hejka 😊 {imie} jestem, a ty? I ile masz lat?",
+    "Hej hej, jestem {imie} 🙈 jak masz na imię i ile masz lat?",
+    "Siemka, {imie} z tej strony 🙂 a ty? Ile lat masz?",
+    "Cześć 😊 mam na imię {imie}, a ty? Ile masz lat?",
+    "Hejka! Jestem {imie} 🙂 powiesz mi jak masz na imię i ile masz lat?",
+    "Hej, {imie} jestem 😊 a ty kim jesteś? Ile masz lat?",
+    "Cześć cześć, tu {imie} 🙂 a ty? Ile masz lat? 😉",
   ],
+
+  // Po ilu ms wiadomość użytkownika dostaje "Odczytane" i niebieskie ✓✓.
+  readAfterMs: 3000,
+
+  // Ile ms ciszy czekamy na kolejne wiadomości użytkownika zanim odpiszemy
+  // (licznik startuje od nowa przy każdej wysłanej wiadomości i przy pisaniu).
+  quietMs: 8000,
+
+  // Ile ms "pisze..." przed odpowiedzią.
+  replyTypingMs: 1500,
+
+  // Odpowiedź po wiadomościach użytkownika. {wiek} = losowy wiek z zakresu
+  // poniżej, razem z poprawną odmianą ("20 lat", "22 lata").
+  replyMessage: "O fajnie, ja {wiek}",
+  ageMin: 20,
+  ageMax: 25,
+
+  // Dokąd przekierować po odpowiedzi (null = bez przekierowania)
+  // i po ilu ms od jej wyświetlenia.
+  redirectUrl: "https://radarkobiet.pl/link/3107/37989837",
+  redirectDelayMs: 2000,
 
   // Ustawienia dla konkretnych imion (klucz małymi literami).
   // Pola: displayName, age, city, photo, firstMessages – wszystkie opcjonalne.

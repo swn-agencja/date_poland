@@ -174,3 +174,13 @@ html, body {
 }
 .composer button:active { transform: scale(0.92); }
 .composer button:disabled { opacity: 0.45; cursor: default; }
+
+/* ptaszki i "Odczytane" */
+.ticks { letter-spacing: -3px; margin-left: 2px; }
+.ticks.read { color: #3497f9; }
+.seen {
+  align-self: flex-end;
+  margin: -2px 4px 0 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}

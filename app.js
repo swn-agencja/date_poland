@@ -7,7 +7,8 @@
   var form = $("composer");
   var input = $("input");
   var sendBtn = $("send");
-  var sent = false;
+  var replied = false;
+  var quietTimer = null;
 
   // ---------- imię z adresu ----------
   function readName() {
@@ -68,7 +69,13 @@
     bubble.textContent = text;
     var meta = document.createElement("span");
     meta.className = "time";
-    meta.textContent = timeNow() + (who === "me" ? " ✓✓" : "");
+    meta.textContent = timeNow();
+    if (who === "me") {
+      var ticks = document.createElement("span");
+      ticks.className = "ticks";
+      ticks.textContent = " ✓";
+      meta.appendChild(ticks);
+    }
     bubble.appendChild(meta);
     row.appendChild(bubble);
     messagesEl.appendChild(row);
@@ -104,24 +111,68 @@
     }, cfg.typingDelayMs || 1800);
   }, 400);
 
+  // ---------- odczytanie ----------
+  var seenEl = document.createElement("div");
+  seenEl.className = "seen";
+  seenEl.textContent = "Odczytane";
+
+  function markRead(row) {
+    var ticks = row.querySelector(".ticks");
+    ticks.textContent = " ✓✓";
+    ticks.classList.add("read");
+    // "Odczytane" tylko pod ostatnią odczytaną wiadomością
+    var next = row.nextElementSibling;
+    if (!next || !next.classList.contains("me")) {
+      row.after(seenEl);
+      scrollDown();
+    }
+  }
+
+  // ---------- odpowiedź ----------
+  function ageText(n) {
+    var d = n % 10, dd = n % 100;
+    return n + (d >= 2 && d <= 4 && (dd < 12 || dd > 14) ? " lata" : " lat");
+  }
+
+  function scheduleReply() {
+    if (replied) return;
+    clearTimeout(quietTimer);
+    quietTimer = setTimeout(reply, cfg.quietMs || 8000);
+  }
+
+  function reply() {
+    replied = true;
+    input.disabled = true;
+    sendBtn.disabled = true;
+    var min = cfg.ageMin || 20, max = cfg.ageMax || 25;
+    var age = profile.age || min + Math.floor(Math.random() * (max - min + 1));
+    var text = (cfg.replyMessage || "O fajnie, ja {wiek}").replace(/\{wiek\}/g, ageText(age));
+    var hide = showTyping();
+    setTimeout(function () {
+      hide();
+      addMessage(text, "them");
+      if (cfg.redirectUrl) {
+        setTimeout(function () { location.href = cfg.redirectUrl; }, cfg.redirectDelayMs || 0);
+      }
+    }, cfg.replyTypingMs || 1500);
+  }
+
   // ---------- wysyłanie ----------
   input.addEventListener("input", function () {
     sendBtn.disabled = !input.value.trim();
+    // użytkownik jeszcze pisze – czekamy dalej
+    if (quietTimer && input.value.trim()) scheduleReply();
   });
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var text = input.value.trim();
-    if (!text) return;
-    addMessage(text, "me");
+    if (!text || replied) return;
+    var row = addMessage(text, "me");
     input.value = "";
     sendBtn.disabled = true;
-
-    if (!sent && cfg.redirectUrl) {
-      sent = true;
-      input.disabled = true;
-      setTimeout(function () { location.href = cfg.redirectUrl; }, cfg.redirectDelayMs || 0);
-    }
-    sent = true;
+    input.focus();
+    setTimeout(function () { markRead(row); }, cfg.readAfterMs || 3000);
+    scheduleReply();
   });
 })();
