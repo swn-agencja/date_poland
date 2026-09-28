@@ -24,7 +24,7 @@ Zero frameworków i zero budowania — czysty HTML/CSS/JS, więc wdrożenie to p
 
 ### GitHub Pages
 1. Repo → **Settings → Pages** → Source: **Deploy from a branch**, wybierz gałąź, folder `/ (root)`.
-2. Adres: `https://<user>.github.io/date_poland/karolina`
+2. Adres: https://swn-agencja.github.io/date_poland/karolina
 
 ### Lokalnie
 ```bash
