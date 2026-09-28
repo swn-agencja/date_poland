@@ -37,3 +37,7 @@ python3 -m http.server 8000
 - `firstMessages` — lista pierwszych wiadomości, losowana jest jedna. `{imie}` zamienia się na imię z adresu.
 - `redirectUrl` — dokąd przekierować po pierwszej wiadomości (`null` = nic się nie dzieje).
 - `profiles` — opcjonalne dane dla konkretnych imion (wiek, miasto, zdjęcie, własne wiadomości). Imiona spoza listy też działają — dostają kolorowy awatar z pierwszą literą.
+
+## Aktualizacje a pamięć przeglądarki
+
+GitHub Pages pozwala przeglądarkom trzymać pliki do 10 minut. Po każdej zmianie w `style.css`, `config.js` lub `app.js` podbij numer `?v=` w `index.html` (np. `?v=4` → `?v=5`), wtedy nowa wersja wczyta się od razu. Do podglądu: Ctrl+Shift+R albo okno incognito.
