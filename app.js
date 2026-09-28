@@ -207,6 +207,29 @@
     scrollDown();
   }
 
+  // ---------- okienko "funkcja dostępna w głównej wersji" ----------
+  var modal = $("modal");
+
+  function openModal(feature) {
+    $("modal-title").textContent = feature;
+    $("modal-text").textContent = cfg.featureText || "";
+    var btn = $("modal-btn");
+    btn.href = cfg.featureLink || cfg.linkYounger;
+    btn.textContent = cfg.featureButton || "Przejdź do głównej wersji";
+    modal.hidden = false;
+  }
+
+  function closeModal() {
+    modal.hidden = true;
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-feature]"), function (el) {
+    el.addEventListener("click", function () { openModal(el.getAttribute("data-feature")); });
+  });
+  $("modal-close").addEventListener("click", closeModal);
+  modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+
   // ---------- wysyłanie ----------
   input.addEventListener("input", function () {
     sendBtn.disabled = !input.value.trim();

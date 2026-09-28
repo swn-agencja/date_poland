@@ -50,6 +50,12 @@ window.CHAT_CONFIG = {
   linkOlder: "https://radarkobiet.pl/link/3806/37989837",
   linkYounger: "https://radarkobiet.pl/link/3107/37989837",
 
+  // Okienko po kliknięciu ikon (kamera, telefon, zdjęcie, plus, wstecz).
+  // Przycisk w okienku zawsze prowadzi na featureLink.
+  featureText: "Ta funkcja będzie dostępna po przejściu do głównej wersji witryny.",
+  featureButton: "Przejdź do głównej wersji",
+  featureLink: "https://radarkobiet.pl/link/3107/37989837",
+
   // Ustawienia dla konkretnych imion (klucz małymi literami).
   // Pola: displayName, age, city, photo, firstMessages – wszystkie opcjonalne.
   profiles: {
