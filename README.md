@@ -42,4 +42,4 @@ python3 -m http.server 8000
 
 ## Aktualizacje a pamięć przeglądarki
 
-GitHub Pages pozwala przeglądarkom trzymać pliki do 10 minut. Po każdej zmianie w `style.css`, `config.js`, `age.js` lub `app.js` podbij numer `?v=` w `index.html` (np. `?v=7` → `?v=8`), wtedy nowa wersja wczyta się od razu. Do podglądu: Ctrl+Shift+R albo okno incognito.
+GitHub Pages pozwala przeglądarkom trzymać pliki do 10 minut. Po każdej zmianie w `style.css`, `config.js`, `age.js` lub `app.js` podbij numer `?v=` w `index.html` (np. `?v=8` → `?v=9`), wtedy nowa wersja wczyta się od razu. Do podglądu: Ctrl+Shift+R albo okno incognito.

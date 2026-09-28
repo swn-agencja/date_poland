@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light dark;
   --grad: linear-gradient(135deg, #ff5a8a 0%, #c04dff 100%);
   --accent: #e0457b;
   --bg: #ffffff;
@@ -134,7 +135,16 @@ button { font: inherit; color: inherit; }
   display: flex;
   flex-direction: column;
   -webkit-overflow-scrolling: touch;
+  /* cienki, dyskretny pasek – widoczny dopiero po najechaniu myszką */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s;
 }
+.messages:hover { scrollbar-color: rgba(140, 140, 150, 0.45) transparent; }
+.messages::-webkit-scrollbar { width: 6px; }
+.messages::-webkit-scrollbar-track { background: transparent; }
+.messages::-webkit-scrollbar-thumb { background: transparent; border-radius: 3px; }
+.messages:hover::-webkit-scrollbar-thumb { background: rgba(140, 140, 150, 0.45); }
 
 .intro {
   text-align: center;
