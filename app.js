@@ -27,7 +27,7 @@
   }
 
   var rawName = readName().slice(0, 30);
-  var key = rawName.toLocaleLowerCase("pl");
+  var key = (rawName || cfg.defaultName || "Ola").toLocaleLowerCase("pl");
   var profile = (cfg.profiles && cfg.profiles[key]) || {};
   var name = profile.displayName || (rawName ? capitalize(rawName) : cfg.defaultName || "Ola");
 
@@ -36,13 +36,16 @@
   $("name").textContent = name + (profile.age ? ", " + profile.age : "");
   if (profile.city) $("status-text").textContent = "online · " + profile.city;
 
+  var hash = 0;
+  for (var i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) % 100003;
+  var photo = profile.photo || (cfg.photos && cfg.photos.length ? cfg.photos[hash % cfg.photos.length] : null);
+
   var avatar = $("avatar");
-  if (profile.photo) {
-    avatar.style.backgroundImage = "url('" + profile.photo + "')";
+  if (photo) {
+    avatar.style.backgroundImage = "url('" + photo + "')";
     avatar.classList.add("photo");
   } else {
-    var hue = 0;
-    for (var i = 0; i < name.length; i++) hue = (hue * 31 + name.charCodeAt(i)) % 360;
+    var hue = hash % 360;
     avatar.style.background = "linear-gradient(135deg, hsl(" + hue + ",75%,62%), hsl(" + ((hue + 40) % 360) + ",80%,52%))";
     $("avatar-initial").textContent = name.charAt(0);
   }

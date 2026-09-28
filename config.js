@@ -26,15 +26,25 @@ window.CHAT_CONFIG = {
     "Siemka, jak minął dzień?",
   ],
 
-  // Opcjonalne ustawienia dla konkretnych imion (klucz małymi literami).
-  // Wszystkie pola są opcjonalne. Imiona spoza listy też działają.
+  // Ustawienia dla konkretnych imion (klucz małymi literami).
+  // Pola: displayName, age, city, photo, firstMessages – wszystkie opcjonalne.
   profiles: {
-    // karolina: {
-    //   displayName: "Karolina",
-    //   age: 26,
-    //   city: "Kraków",
-    //   photo: "img/karolina.jpg",
-    //   firstMessages: ["Hej, tu Karolina z Krakowa 😊"],
-    // },
+    ola:      { photo: "img/ola.jpg" },
+    karolina: { photo: "img/karolina.jpg" },
+    magda:    { photo: "img/magda.jpg" },
+    ania:     { photo: "img/ania.jpg" },
+    kasia:    { photo: "img/kasia.jpg" },
+    natalia:  { photo: "img/natalia.jpg" },
+    julia:    { photo: "img/julia.jpg" },
+    zuzia:    { photo: "img/zuzia.jpg" },
+    wiktoria: { photo: "img/wiktoria.jpg" },
   },
+
+  // Imiona spoza listy powyżej dostają jedno z tych zdjęć
+  // (zawsze to samo dla danego imienia, np. /ewa zawsze ma to samo zdjęcie).
+  photos: [
+    "img/ola.jpg", "img/karolina.jpg", "img/magda.jpg",
+    "img/ania.jpg", "img/kasia.jpg", "img/natalia.jpg",
+    "img/julia.jpg", "img/zuzia.jpg", "img/wiktoria.jpg",
+  ],
 };
