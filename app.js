@@ -186,18 +186,29 @@
     var start = hash(p.slug) % Math.max(1, others.length);
     others = others.slice(start).concat(others.slice(0, start)).slice(0, 4);
 
+    // miniatury "kolejnych zdjęć": najpierw dodatkowe zdjęcia z config.js,
+    // brakujące uzupełnia rozmyte zdjęcie główne
+    var extra = (p.photos || []).slice(0, 3);
+    var thumbs = extra.concat([p.photo, p.photo, p.photo]).slice(0, 3);
+    var total = 1 + Math.max(extra.length, 4 + (hash(p.slug) % 7));
+
     view.innerHTML =
       '<main class="wrap profile-page">' +
         '<a class="back" href="./" data-home>← Wszystkie profile</a>' +
         '<div class="profile-main">' +
-          '<div class="locked">' +
-            '<img src="' + url(p.photo) + '" alt="' + esc(p.name) + '" />' +
-            '<div class="locked-over">' +
-              '<div class="lock-icon">♡</div>' +
-              "<h2>Profil czeka na Ciebie</h2>" +
-              "<p>Załóż darmowe konto, żeby zobaczyć wszystkie zdjęcia i zacząć rozmowę.</p>" +
-              '<button class="btn btn-primary" type="button" data-join>Zobacz zdjęcia</button>' +
+          '<div class="gallery">' +
+            '<div class="main-photo">' +
+              '<img src="' + url(p.photo) + '" alt="' + esc(p.name) + ", " + p.age + '" />' +
+              onlinePill() +
+              '<span class="photo-count">1 / ' + total + "</span>" +
             "</div>" +
+            '<div class="thumbs">' + thumbs.map(function (src, i) {
+              return '<button class="thumb" type="button" data-join="Zobacz wszystkie zdjęcia" aria-label="Zobacz więcej zdjęć">' +
+                '<img src="' + url(src) + '" alt="" loading="lazy" />' +
+                (i === thumbs.length - 1 ? '<span class="thumb-more">+' + (total - thumbs.length) + "</span>" : '<span class="thumb-lock">🔒</span>') +
+                "</button>";
+            }).join("") + "</div>" +
+            '<button class="btn btn-primary btn-block" type="button" data-join="Zobacz wszystkie zdjęcia">Zobacz więcej zdjęć</button>' +
           "</div>" +
           '<div class="profile-details">' +
             '<div class="status"><span class="live-dot"></span>Online · aktywna teraz</div>' +
