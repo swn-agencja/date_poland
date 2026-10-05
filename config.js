@@ -22,10 +22,10 @@ window.SITE_CONFIG = {
       interests: ["Moda", "Wieczorne wyjścia", "Flirt"],
     },
     {
-      slug: "ola", name: "Ola", age: 27, photo: "img/ola.jpg", isNew: false,
-      bio: "Lubię długie rozmowy przy winie i facetów, którzy potrafią mnie rozśmieszyć 😊",
-      about: "Nie lubię pisać w nieskończoność. Jeśli od pierwszych wiadomości dobrze się dogadujemy, chętnie umówię się na kawę albo spacer.",
-      interests: ["Wino", "Spacery", "Seriale"],
+      slug: "sandra", name: "Sandra", age: 25, photo: "img/sandra.jpg", isNew: true,
+      bio: "Siłownia rano, randka wieczorem? Brzmi jak idealny dzień 😉",
+      about: "Dbam o siebie i lubię, kiedy facet też to robi. Jestem bezpośrednia – jeśli ktoś mi się podoba, nie udaję, że jest inaczej.",
+      interests: ["Siłownia", "Flirt", "Wieczorne wyjścia"],
     },
     {
       slug: "paulina", name: "Paulina", age: 29, photo: "img/paulina.jpg", isNew: true,
@@ -34,10 +34,16 @@ window.SITE_CONFIG = {
       interests: ["Podróże", "Fitness", "Wieczory we dwoje"],
     },
     {
-      slug: "karolina", name: "Karolina", age: 29, photo: "img/karolina.jpg", isNew: false,
-      bio: "Słońce, morze i spontaniczne wyjazdy. Szukam kogoś, kto spakuje się w 10 minut 😉",
-      about: "Jestem typem osoby, która w piątek wieczorem decyduje, że w sobotę jedzie nad morze. Fajnie byłoby mieć z kim.",
-      interests: ["Podróże", "Morze", "Spontaniczność"],
+      slug: "ola", name: "Ola", age: 27, photo: "img/ola.jpg", isNew: false,
+      bio: "Lubię długie rozmowy przy winie i facetów, którzy potrafią mnie rozśmieszyć 😊",
+      about: "Nie lubię pisać w nieskończoność. Jeśli od pierwszych wiadomości dobrze się dogadujemy, chętnie umówię się na kawę albo spacer.",
+      interests: ["Wino", "Spacery", "Seriale"],
+    },
+    {
+      slug: "dominika", name: "Dominika", age: 26, photo: "img/dominika.jpg", isNew: true,
+      bio: "Koronka, uśmiech i odrobina zadziorności. Odważysz się napisać?",
+      about: "Lubię wyglądać dobrze i czuć się dobrze w swoim towarzystwie. Szukam faceta, który potrafi docenić kobietę i nie boi się zrobić pierwszego kroku.",
+      interests: ["Moda", "Chemia", "Randki"],
     },
     {
       slug: "monika", name: "Monika", age: 46, photo: "img/monika.jpg", photos: ["img/monika-2.jpg"], isNew: true,
@@ -46,10 +52,10 @@ window.SITE_CONFIG = {
       interests: ["Wycieczki", "Natura", "Romantyczne wieczory"],
     },
     {
-      slug: "magda", name: "Magda", age: 31, photo: "img/magda.jpg", isNew: false,
-      bio: "Kawa, książki i dobre rozmowy. Inteligencja to dla mnie najlepszy flirt.",
-      about: "Na co dzień spokojna, ale przy dobrym towarzystwie robię się zaskakująco gadatliwa. Lubię facetów, którzy mają coś ciekawego do powiedzenia.",
-      interests: ["Kawa", "Książki", "Rozmowy"],
+      slug: "karolina", name: "Karolina", age: 29, photo: "img/karolina.jpg", isNew: false,
+      bio: "Słońce, morze i spontaniczne wyjazdy. Szukam kogoś, kto spakuje się w 10 minut 😉",
+      about: "Jestem typem osoby, która w piątek wieczorem decyduje, że w sobotę jedzie nad morze. Fajnie byłoby mieć z kim.",
+      interests: ["Podróże", "Morze", "Spontaniczność"],
     },
     {
       slug: "weronika", name: "Weronika", age: 24, photo: "img/weronika.jpg", isNew: true,
@@ -58,10 +64,34 @@ window.SITE_CONFIG = {
       interests: ["Taniec", "Flirt", "Spontaniczne randki"],
     },
     {
+      slug: "patrycja", name: "Patrycja", age: 28, photo: "img/patrycja.jpg", isNew: true,
+      bio: "Puszczam oczko tylko wybranym 😉 Może będziesz następny?",
+      about: "Mam poczucie humoru i lubię się droczyć. Najlepiej dogaduję się z facetami, którzy łapią żarty i sami potrafią rozśmieszyć.",
+      interests: ["Flirt", "Humor", "Wieczory we dwoje"],
+    },
+    {
+      slug: "magda", name: "Magda", age: 31, photo: "img/magda.jpg", isNew: false,
+      bio: "Kawa, książki i dobre rozmowy. Inteligencja to dla mnie najlepszy flirt.",
+      about: "Na co dzień spokojna, ale przy dobrym towarzystwie robię się zaskakująco gadatliwa. Lubię facetów, którzy mają coś ciekawego do powiedzenia.",
+      interests: ["Kawa", "Książki", "Rozmowy"],
+    },
+    {
+      slug: "agnieszka", name: "Agnieszka", age: 35, photo: "img/agnieszka.jpg", isNew: true,
+      bio: "Dom z ogródkiem już mam. Brakuje tylko kogoś, z kim wypiję wieczorem wino 🍷",
+      about: "Jestem dojrzała, wiem, czego chcę, i nie lubię gierek. Szukam mężczyzny, z którym będzie mi dobrze zarówno na kanapie, jak i na mieście.",
+      interests: ["Wino", "Ogród", "Romantyczne wieczory"],
+    },
+    {
       slug: "ania", name: "Ania", age: 26, photo: "img/ania.jpg", isNew: false,
       bio: "Uśmiechnięta, pozytywna i ciekawa ludzi. Napisz, a sprawdzimy, czy zaiskrzy ✨",
       about: "Wierzę, że od jednej dobrej rozmowy może się zacząć coś naprawdę fajnego. Szukam kogoś, z kim nie będzie nudno.",
       interests: ["Muzyka", "Koncerty", "Randki"],
+    },
+    {
+      slug: "marta", name: "Marta", age: 27, photo: "img/marta.jpg", isNew: true,
+      bio: "Naturalna, trochę nieśmiała, ale z dużym sercem 🙂",
+      about: "Nie jestem typem imprezowiczki. Wolę spokojne randki, długie rozmowy i kogoś, przy kim mogę być sobą.",
+      interests: ["Kawa", "Spacery", "Kino"],
     },
     {
       slug: "kasia", name: "Kasia", age: 24, photo: "img/kasia.jpg", isNew: false,
