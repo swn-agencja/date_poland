@@ -52,10 +52,10 @@ window.SITE_CONFIG = {
       interests: ["Wycieczki", "Natura", "Romantyczne wieczory"],
     },
     {
-      slug: "karolina", name: "Karolina", age: 29, photo: "img/karolina.jpg", isNew: false,
-      bio: "Słońce, morze i spontaniczne wyjazdy. Szukam kogoś, kto spakuje się w 10 minut 😉",
-      about: "Jestem typem osoby, która w piątek wieczorem decyduje, że w sobotę jedzie nad morze. Fajnie byłoby mieć z kim.",
-      interests: ["Podróże", "Morze", "Spontaniczność"],
+      slug: "nikola", name: "Nikola", age: 24, photo: "img/nikola.jpg", isNew: true,
+      bio: "Niebieskie oczy i zero cierpliwości do nudnych wiadomości 😏",
+      about: "Lubię ładne rzeczy, dobre jedzenie i facetów, którzy wiedzą, jak zaprosić kobietę na randkę. Nie odpisuję na „hej”, więc postaraj się bardziej.",
+      interests: ["Moda", "Restauracje", "Flirt"],
     },
     {
       slug: "weronika", name: "Weronika", age: 24, photo: "img/weronika.jpg", isNew: true,
@@ -68,6 +68,18 @@ window.SITE_CONFIG = {
       bio: "Puszczam oczko tylko wybranym 😉 Może będziesz następny?",
       about: "Mam poczucie humoru i lubię się droczyć. Najlepiej dogaduję się z facetami, którzy łapią żarty i sami potrafią rozśmieszyć.",
       interests: ["Flirt", "Humor", "Wieczory we dwoje"],
+    },
+    {
+      slug: "karolina", name: "Karolina", age: 29, photo: "img/karolina.jpg", isNew: false,
+      bio: "Słońce, morze i spontaniczne wyjazdy. Szukam kogoś, kto spakuje się w 10 minut 😉",
+      about: "Jestem typem osoby, która w piątek wieczorem decyduje, że w sobotę jedzie nad morze. Fajnie byłoby mieć z kim.",
+      interests: ["Podróże", "Morze", "Spontaniczność"],
+    },
+    {
+      slug: "oliwia", name: "Oliwia", age: 23, photo: "img/oliwia.jpg", isNew: true,
+      bio: "Trochę szalona, trochę leniwa w niedziele. Szukam kogoś do obu wersji 😜",
+      about: "W tygodniu studia i praca, w weekend chętnie wyskoczę gdzieś spontanicznie. Lubię facetów z dystansem do siebie.",
+      interests: ["Imprezy", "Seriale", "Spontaniczność"],
     },
     {
       slug: "magda", name: "Magda", age: 31, photo: "img/magda.jpg", isNew: false,
@@ -92,6 +104,12 @@ window.SITE_CONFIG = {
       bio: "Naturalna, trochę nieśmiała, ale z dużym sercem 🙂",
       about: "Nie jestem typem imprezowiczki. Wolę spokojne randki, długie rozmowy i kogoś, przy kim mogę być sobą.",
       interests: ["Kawa", "Spacery", "Kino"],
+    },
+    {
+      slug: "ewelina", name: "Ewelina", age: 31, photo: "img/ewelina.jpg", isNew: true,
+      bio: "Zdjęcie twarzy pokażę po pierwszej dobrej wiadomości 😉",
+      about: "Jestem dyskretna i wolę poznać kogoś najpierw przez rozmowę. Jeśli złapiemy kontakt, chętnie umówię się na żywo.",
+      interests: ["Fitness", "Dyskrecja", "Wieczory we dwoje"],
     },
     {
       slug: "kasia", name: "Kasia", age: 24, photo: "img/kasia.jpg", isNew: false,
