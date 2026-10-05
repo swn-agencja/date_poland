@@ -1,28 +1,49 @@
 (function () {
   "use strict";
 
-  var cfg = window.CHAT_CONFIG || {};
-  var $ = function (id) { return document.getElementById(id); };
-  var messagesEl = $("messages");
-  var form = $("composer");
-  var input = $("input");
-  var sendBtn = $("send");
-  var statusEl = $("status");
+  var cfg = window.SITE_CONFIG || {};
+  var PROFILES = cfg.profiles || [];
+  var view = document.getElementById("view");
+  var modal = document.getElementById("modal");
 
-  var userMessages = [];
-  var replied = false;
-  var quietTimer = null;
+  // ---------- adresy ----------
+  // Na *.github.io strona projektu siedzi pod /<repo>/, na własnej domenie pod /.
+  var segs = location.pathname.split("/").filter(Boolean);
+  var onGithubIo = /\.github\.io$/.test(location.hostname);
+  var BASE = onGithubIo && segs.length ? "/" + segs[0] + "/" : "/";
 
-  // ---------- imię z adresu ----------
-  function readName() {
-    if (window.__CHAT_NAME__) return window.__CHAT_NAME__;
-    // Na GitHub Pages ścieżki z imieniem przychodzą przez 404.html (__CHAT_NAME__),
-    // więc bezpośrednio serwowany index to strona główna.
-    if (/\.github\.io$/.test(location.hostname)) return "";
-    var segs = location.pathname.split("/").filter(Boolean);
-    var last = segs[segs.length - 1] || "";
+  function slugFromPath() {
+    if (window.__SLUG__) {
+      var s = window.__SLUG__;
+      window.__SLUG__ = null;
+      return s;
+    }
+    var rest = location.pathname.slice(BASE.length).split("/").filter(Boolean);
+    var last = rest[rest.length - 1] || "";
     if (/\.html?$/i.test(last)) return "";
     try { return decodeURIComponent(last); } catch (e) { return last; }
+  }
+
+  function url(path) {
+    return BASE + path;
+  }
+
+  // ---------- pomocnicze ----------
+  function esc(v) {
+    return String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function hash(str) {
+    var h = 2166136261;
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  function distance(slug) {
+    return "około " + (2 + (hash(slug) % 17)) + " km od Ciebie";
   }
 
   function capitalize(s) {
@@ -30,235 +51,249 @@
     return s.replace(/(^|\s)(\S)/g, function (m, sp, ch) { return sp + ch.toLocaleUpperCase("pl"); });
   }
 
-  var rawName = readName().slice(0, 30);
-  var key = (rawName || cfg.defaultName || "Ola").toLocaleLowerCase("pl");
-  var profile = (cfg.profiles && cfg.profiles[key]) || {};
-  var name = profile.displayName || (rawName ? capitalize(rawName) : cfg.defaultName || "Ola");
+  function findProfile(raw) {
+    var slug = String(raw).toLocaleLowerCase("pl").slice(0, 30);
+    for (var i = 0; i < PROFILES.length; i++) if (PROFILES[i].slug === slug) return PROFILES[i];
 
-  var hash = 0;
-  for (var i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) % 100003;
-  var photo = profile.photo || (cfg.photos && cfg.photos.length ? cfg.photos[hash % cfg.photos.length] : null);
-
-  function paintAvatar(el) {
-    if (photo) {
-      el.style.backgroundImage = "url('" + photo + "')";
-    } else {
-      var hue = hash % 360;
-      el.style.background = "linear-gradient(135deg, hsl(" + hue + ",75%,62%), hsl(" + ((hue + 40) % 360) + ",80%,52%))";
-      el.textContent = name.charAt(0);
-    }
-    return el;
-  }
-
-  function miniAvatar(cls) {
-    var el = document.createElement("div");
-    el.className = "avatar " + (cls || "xs");
-    return paintAvatar(el);
-  }
-
-  // ---------- nagłówek i wizytówka ----------
-  var onlineText = profile.city ? "Aktywna teraz · " + profile.city : "Aktywna teraz";
-  document.title = name;
-  $("name").textContent = name;
-  statusEl.textContent = onlineText;
-  $("intro-name").textContent = name + (profile.age ? ", " + profile.age : "");
-  paintAvatar($("avatar"));
-  paintAvatar($("intro-avatar"));
-
-  function timeNow() {
-    var d = new Date();
-    return d.getHours() + ":" + String(d.getMinutes()).padStart(2, "0");
-  }
-  $("time-sep").textContent = "Dzisiaj " + timeNow();
-
-  // ---------- wiadomości ----------
-  function scrollDown() {
-    messagesEl.scrollTo({ top: messagesEl.scrollHeight, behavior: "smooth" });
-  }
-
-  function append(row) {
-    // w grupie wiadomości od niej awatar jest tylko przy ostatniej
-    var prev = messagesEl.lastElementChild;
-    if (prev && prev.classList.contains("them") && row.classList.contains("them")) prev.classList.remove("last");
-    messagesEl.appendChild(row);
-    scrollDown();
-    return row;
-  }
-
-  function addMessage(text, who) {
-    var row = document.createElement("div");
-    row.className = "msg " + who + (who === "them" ? " last" : "");
-    if (who === "them") row.appendChild(miniAvatar());
-
-    var bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.textContent = text;
-
-    var meta = document.createElement("span");
-    meta.className = "meta";
-    meta.textContent = timeNow();
-    if (who === "me") {
-      var ticks = document.createElement("span");
-      ticks.className = "ticks";
-      ticks.textContent = "✓";
-      meta.appendChild(ticks);
-    }
-    bubble.appendChild(meta);
-    row.appendChild(bubble);
-
-    if (who === "them" && document.hidden) document.title = "(1) " + name;
-    return append(row);
-  }
-
-  document.addEventListener("visibilitychange", function () {
-    if (!document.hidden) document.title = name;
-  });
-
-  function showTyping() {
-    var row = document.createElement("div");
-    row.className = "msg them last typing";
-    row.appendChild(miniAvatar());
-    var bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.innerHTML = "<i></i><i></i><i></i>";
-    row.appendChild(bubble);
-    append(row);
-    statusEl.textContent = "pisze...";
-    statusEl.classList.add("typing");
-    return function hide() {
-      row.remove();
-      statusEl.textContent = onlineText;
-      statusEl.classList.remove("typing");
+    // imię spoza listy – składamy profil, zawsze ten sam dla danego imienia
+    var fb = cfg.fallback || {};
+    var h = hash(slug);
+    var pick = function (list, salt) { return list && list.length ? list[(h + salt) % list.length] : ""; };
+    var min = fb.ageMin || 23, max = fb.ageMax || 34;
+    return {
+      slug: slug,
+      name: capitalize(slug),
+      age: min + (h % (max - min + 1)),
+      photo: PROFILES.length ? PROFILES[h % PROFILES.length].photo : "",
+      bio: pick(fb.bios, 0),
+      about: pick(fb.abouts, 1),
+      interests: pick(fb.interests, 2) || [],
+      isNew: true,
     };
   }
 
-  function pick(list) {
-    return list[Math.floor(Math.random() * list.length)];
+  // ---------- elementy ----------
+  function onlinePill() {
+    return '<span class="pill-online"><span class="live-dot"></span>Online</span>';
   }
 
-  function say(text, typingMs, done) {
-    var hide = showTyping();
-    setTimeout(function () {
-      hide();
-      addMessage(text, "them");
-      if (done) done();
-    }, typingMs);
+  function card(p) {
+    return (
+      '<a class="card" href="' + url(p.slug) + '" data-route="' + esc(p.slug) + '">' +
+        '<div class="card-photo">' +
+          '<img src="' + url(p.photo) + '" alt="' + esc(p.name) + ", " + p.age + '" loading="lazy" />' +
+          '<div class="shade"></div>' +
+          onlinePill() +
+          (p.isNew ? '<span class="pill-new">Nowa</span>' : "") +
+          '<div class="card-info"><h3>' + esc(p.name) + ", " + p.age + '</h3><div class="distance">' + distance(p.slug) + "</div></div>" +
+        "</div>" +
+        '<div class="card-body"><p class="card-bio">' + esc(p.bio) + '</p><span class="card-btn">Zobacz profil</span></div>' +
+      "</a>"
+    );
   }
 
-  // ---------- pierwsza wiadomość ----------
-  var pool = (profile.firstMessages && profile.firstMessages.length ? profile.firstMessages : cfg.firstMessages) || ["Hej, co tam?"];
-  var first = pick(pool).replace(/\{imie\}/g, name);
-  setTimeout(function () { say(first, cfg.typingDelayMs || 1800); }, 600);
-
-  // ---------- odczytanie ----------
-  var seenEl = document.createElement("div");
-  seenEl.className = "seen";
-  seenEl.appendChild(miniAvatar());
-  seenEl.appendChild(document.createTextNode("Odczytane"));
-
-  function markRead(row) {
-    var ticks = row.querySelector(".ticks");
-    ticks.textContent = "✓✓";
-    ticks.classList.add("read");
-    // "Odczytane" tylko pod ostatnią odczytaną wiadomością
-    var next = row.nextElementSibling;
-    if (!next || !next.classList.contains("me")) {
-      row.after(seenEl);
-      scrollDown();
-    }
+  function sectionHead(eyebrow, title, desc) {
+    return (
+      '<div class="section-head"><div class="eyebrow">' + eyebrow + '</div><h2 class="section-title">' + title + "</h2>" +
+      (desc ? '<p class="section-desc">' + desc + "</p>" : "") + "</div>"
+    );
   }
 
-  // ---------- odpowiedź i przycisk ----------
-  function ageText(n) {
-    var d = n % 10, dd = n % 100;
-    return n + (d >= 2 && d <= 4 && (dd < 12 || dd > 14) ? " lata" : " lat");
+  // ---------- strona główna ----------
+  function home() {
+    document.title = "Randki w Twojej okolicy | " + cfg.brand.join("");
+
+    var near = PROFILES.slice().sort(function (a, b) { return (hash(a.slug) % 17) - (hash(b.slug) % 17); }).slice(0, 4);
+    var fresh = PROFILES.filter(function (p) { return p.isNew; });
+    var stack = PROFILES.slice(0, 3);
+
+    view.innerHTML =
+      '<section class="hero">' +
+        '<div class="hero-bg" aria-hidden="true"></div>' +
+        '<div class="wrap hero-inner">' +
+          '<div class="hero-content">' +
+            '<div class="badge"><span class="live-dot"></span>Aktywne profile w Twojej okolicy</div>' +
+            "<h1>Poznaj kogoś,<br />z kim <em>chcesz się spotkać.</em></h1>" +
+            '<p class="hero-text">Przeglądaj profile kobiet z Twojej okolicy, sprawdź, kto jest teraz online, i zacznij rozmowę, gdy ktoś wpadnie Ci w oko.</p>' +
+            '<div class="hero-actions">' +
+              '<button class="btn btn-primary" type="button" data-join>Zobacz profile</button>' +
+              '<a class="btn btn-ghost" href="#poznaj" data-section="poznaj">Przeglądaj osoby</a>' +
+            "</div>" +
+            '<div class="hero-note">18+ · szybka rejestracja · pełna dyskrecja</div>' +
+          "</div>" +
+          '<div class="hero-stack" aria-hidden="true">' +
+            stack.map(function (p, i) {
+              return '<div class="stack-card s' + i + '"><img src="' + url(p.photo) + '" alt="" />' + onlinePill() +
+                '<div class="stack-name">' + esc(p.name) + ", " + p.age + "</div></div>";
+            }).join("") +
+          "</div>" +
+        "</div>" +
+      "</section>" +
+
+      '<main class="wrap">' +
+        '<section id="poznaj">' + sectionHead("Poznaj osoby", "Może właśnie ona?", "Profile aktywne w Twojej okolicy.") +
+          '<div class="grid">' + PROFILES.slice(0, 8).map(card).join("") + "</div></section>" +
+
+        '<section id="online">' + sectionHead("Teraz online", "Kto jest aktywny?") +
+          '<div class="rail">' + PROFILES.map(function (p) {
+            return '<a class="rail-card" href="' + url(p.slug) + '" data-route="' + esc(p.slug) + '">' +
+              '<div class="rail-photo"><img src="' + url(p.photo) + '" alt="" loading="lazy" /><div class="shade"></div>' + onlinePill() + "</div>" +
+              "<p>" + esc(p.name) + ", " + p.age + "</p><small>" + distance(p.slug) + "</small></a>";
+          }).join("") + "</div></section>" +
+
+        '<div class="band">' +
+          '<div class="eyebrow">Nowe znajomości</div>' +
+          "<h2>Nie wiesz, od czego zacząć?</h2>" +
+          "<p>Załóż darmowe konto w minutę i zobacz, kto z Twojej okolicy jest teraz aktywny.</p>" +
+          '<button class="btn btn-white" type="button" data-join>Przejdź do rejestracji</button>' +
+        "</div>" +
+
+        '<section id="okolica">' + sectionHead("W Twojej okolicy", "Blisko Ciebie", "Odległość jest orientacyjna – pomaga szybciej znaleźć kogoś z okolicy.") +
+          '<div class="grid">' + near.map(card).join("") + "</div></section>" +
+
+        "<section>" + sectionHead("Jak to działa?", "Trzy kroki do randki") +
+          '<div class="steps">' +
+            '<article class="step"><div class="step-no">01 / ZNAJDŹ</div><h3>Przeglądaj profile</h3><p>Zdjęcia i krótkie opisy kobiet aktywnych w Twojej okolicy.</p></article>' +
+            '<article class="step"><div class="step-no">02 / POZNAJ</div><h3>Sprawdź, kim jest</h3><p>Zainteresowania, opis i informacja, czy jest teraz online.</p></article>' +
+            '<article class="step"><div class="step-no">03 / NAPISZ</div><h3>Zacznij rozmowę</h3><p>Jeśli zaiskrzy – napisz pierwszy i umówcie się na żywo.</p></article>' +
+          "</div></section>" +
+
+        '<section id="nowe">' + sectionHead("Dopiero dołączyły", "Nowe profile") +
+          '<div class="grid">' + fresh.map(card).join("") + "</div></section>" +
+
+        "<section>" + sectionHead("Aktywność", "Kto jest teraz online?") +
+          '<div class="activity">' + PROFILES.slice(0, 6).map(function (p) {
+            return '<a class="activity-row" href="' + url(p.slug) + '" data-route="' + esc(p.slug) + '">' +
+              '<img src="' + url(p.photo) + '" alt="" loading="lazy" />' +
+              '<div class="activity-info"><div class="activity-name">' + esc(p.name) + ", " + p.age + ' <span class="live-dot"></span></div>' +
+              '<div class="activity-bio">' + esc(p.bio) + "</div></div>" +
+              '<span class="activity-btn">Profil</span></a>';
+          }).join("") + "</div></section>" +
+
+        footer() +
+      "</main>";
   }
 
-  function scheduleReply() {
-    if (replied) return;
-    clearTimeout(quietTimer);
-    quietTimer = setTimeout(reply, cfg.quietMs || 8000);
+  function footer() {
+    return '<footer class="footer"><strong>' + esc(cfg.brand.join("")) + "</strong><br />" +
+      "Serwis przeznaczony wyłącznie dla osób pełnoletnich. Odległości mają charakter orientacyjny.</footer>";
   }
 
-  function reply() {
-    replied = true;
-    var min = cfg.ageMin || 20, max = cfg.ageMax || 25;
-    var age = profile.age || min + Math.floor(Math.random() * (max - min + 1));
-    var text = (cfg.replyMessage || "O fajnie, ja {wiek}").replace(/\{wiek\}/g, ageText(age));
-    say(text, cfg.replyTypingMs || 1500, function () {
-      var follow = cfg.followUpMessages && cfg.followUpMessages.length ? pick(cfg.followUpMessages) : null;
-      if (!follow) return setTimeout(showCta, cfg.ctaDelayMs || 0);
-      setTimeout(function () {
-        say(follow.replace(/\{imie\}/g, name), cfg.followUpTypingMs || 2200, function () {
-          setTimeout(showCta, cfg.ctaDelayMs || 0);
-        });
-      }, 400);
-    });
+  // ---------- strona profilu ----------
+  function profilePage(p) {
+    document.title = p.name + ", " + p.age + " | " + cfg.brand.join("");
+    var others = PROFILES.filter(function (x) { return x.slug !== p.slug; });
+    var start = hash(p.slug) % Math.max(1, others.length);
+    others = others.slice(start).concat(others.slice(0, start)).slice(0, 4);
+
+    view.innerHTML =
+      '<main class="wrap profile-page">' +
+        '<a class="back" href="./" data-home>← Wszystkie profile</a>' +
+        '<div class="profile-main">' +
+          '<div class="locked">' +
+            '<img src="' + url(p.photo) + '" alt="' + esc(p.name) + '" />' +
+            '<div class="locked-over">' +
+              '<div class="lock-icon">♡</div>' +
+              "<h2>Profil czeka na Ciebie</h2>" +
+              "<p>Załóż darmowe konto, żeby zobaczyć wszystkie zdjęcia i zacząć rozmowę.</p>" +
+              '<button class="btn btn-primary" type="button" data-join>Zobacz zdjęcia</button>' +
+            "</div>" +
+          "</div>" +
+          '<div class="profile-details">' +
+            '<div class="status"><span class="live-dot"></span>Online · aktywna teraz</div>' +
+            "<h1>" + esc(p.name) + ", " + p.age + "</h1>" +
+            '<div class="distance">' + distance(p.slug) + "</div>" +
+            '<p class="lead">' + esc(p.bio) + "</p>" +
+            '<p class="about">' + esc(p.about) + "</p>" +
+            '<div class="tags">' + (p.interests || []).map(function (t) { return '<span class="tag">' + esc(t) + "</span>"; }).join("") + "</div>" +
+            '<div class="action-row">' +
+              '<button class="btn btn-primary" type="button" data-join>Wyślij wiadomość</button>' +
+              '<button class="btn btn-ghost" type="button" data-join>Poznaj mnie</button>' +
+            "</div>" +
+            '<div class="band band-sm">' +
+              "<h2>" + esc(p.name) + " jest teraz online</h2>" +
+              "<p>Napisz, zanim zrobi to ktoś inny. Rejestracja zajmuje chwilę.</p>" +
+              '<button class="btn btn-white" type="button" data-join>Przejdź dalej</button>' +
+            "</div>" +
+          "</div>" +
+        "</div>" +
+        "<section>" + sectionHead("Mogą Cię zainteresować", "Inne aktywne profile") +
+          '<div class="grid">' + others.map(card).join("") + "</div></section>" +
+        footer() +
+      "</main>";
   }
 
-  function targetLink() {
-    var userAge = window.detectAge ? window.detectAge(userMessages) : null;
-    var older = userAge !== null && userAge >= (cfg.ageThreshold || 45);
-    return older ? cfg.linkOlder : cfg.linkYounger;
+  // ---------- router ----------
+  var currentSlug = null;
+
+  function render(slug) {
+    currentSlug = slug || "";
+    document.body.classList.toggle("is-profile", !!slug);
+    if (slug) profilePage(findProfile(slug));
+    else home();
   }
 
-  function showCta() {
-    var btn = $("cta-btn");
-    btn.href = targetLink();
-    btn.textContent = cfg.ctaText || "Kontynuuj rozmowę";
-    $("cta-info").textContent = (cfg.ctaInfo || "").replace(/\{imie\}/g, name);
-    input.blur();
-    form.hidden = true;
-    $("cta").hidden = false;
-    scrollDown();
+  function go(slug, sectionId) {
+    var target = slug ? url(slug) : BASE;
+    if (location.pathname !== target) history.pushState(null, "", target);
+    if (currentSlug !== (slug || "")) render(slug);
+    if (sectionId) scrollToSection(sectionId);
+    else window.scrollTo(0, 0);
   }
 
-  // ---------- okienko "funkcja dostępna w głównej wersji" ----------
-  var modal = $("modal");
+  function scrollToSection(id) {
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 
-  function openModal(feature) {
-    $("modal-title").textContent = feature;
-    $("modal-text").textContent = cfg.featureText || "";
-    var btn = $("modal-btn");
-    btn.href = cfg.featureLink || cfg.linkYounger;
-    btn.textContent = cfg.featureButton || "Przejdź do głównej wersji";
+  window.addEventListener("popstate", function () { render(slugFromPath()); });
+
+  // ---------- okienko ----------
+  function openModal(title) {
+    document.getElementById("modal-title").textContent = title || "Poznaj kogoś nowego";
     modal.hidden = false;
+    document.body.style.overflow = "hidden";
   }
 
   function closeModal() {
     modal.hidden = true;
+    document.body.style.overflow = "";
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll("[data-feature]"), function (el) {
-    el.addEventListener("click", function () { openModal(el.getAttribute("data-feature")); });
-  });
-  $("modal-close").addEventListener("click", closeModal);
-  modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+  document.getElementById("age-young").href = cfg.linkYounger;
+  document.getElementById("age-old").href = cfg.linkOlder;
 
-  // ---------- wysyłanie ----------
-  input.addEventListener("input", function () {
-    sendBtn.disabled = !input.value.trim();
-    // użytkownik jeszcze pisze – czekamy dalej
-    if (quietTimer && !replied && input.value.trim()) scheduleReply();
+  // ---------- kliknięcia ----------
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var t = e.target;
+
+    if (t.closest("[data-close]")) return closeModal();
+
+    var join = t.closest("[data-join]");
+    if (join) {
+      e.preventDefault();
+      var title = join.getAttribute("data-join");
+      if (!title && currentSlug) title = findProfile(currentSlug).name + " czeka na wiadomość";
+      return openModal(title);
+    }
+
+    var route = t.closest("[data-route]");
+    if (route) { e.preventDefault(); return go(route.getAttribute("data-route")); }
+
+    var section = t.closest("[data-section]");
+    if (section) { e.preventDefault(); return go("", section.getAttribute("data-section")); }
+
+    if (t.closest("[data-home]")) { e.preventDefault(); return go(""); }
   });
 
-  $("emoji").addEventListener("click", function () {
-    input.value += "🙂";
-    input.dispatchEvent(new Event("input"));
-    input.focus();
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeModal();
   });
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var text = input.value.trim();
-    if (!text) return;
-    userMessages.push(text);
-    var row = addMessage(text, "me");
-    input.value = "";
-    sendBtn.disabled = true;
-    input.focus();
-    setTimeout(function () { markRead(row); }, cfg.readAfterMs || 3000);
-    scheduleReply();
-  });
+  // ---------- start ----------
+  document.getElementById("logo-name").innerHTML = esc(cfg.brand[0]) + "<span>" + esc(cfg.brand[1] || "") + "</span>";
+  document.getElementById("logo-sub").textContent = cfg.brandSub || "";
+  render(slugFromPath());
+  if (location.hash.length > 1) scrollToSection(location.hash.slice(1));
 })();

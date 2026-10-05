@@ -2,10 +2,10 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#16161a" media="(prefers-color-scheme: dark)" />
-  <title>Czat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0c" />
+  <title>Randki w Twojej okolicy | randki.site</title>
+  <meta name="description" content="Poznaj kobiety w swojej okolicy. Przeglądaj profile, zobacz kto jest online i umów się na randkę." />
   <script>
     // Powrót z 404.html (GitHub Pages): ?imie=karolina -> ładny adres /karolina
     (function () {
@@ -15,83 +15,58 @@
         p.delete("imie");
         var q = p.toString();
         history.replaceState(null, "", location.pathname.replace(/\/?$/, "/") + encodeURIComponent(n) + (q ? "?" + q : "") + location.hash);
-        window.__CHAT_NAME__ = n;
+        window.__SLUG__ = n;
       }
     })();
   </script>
-  <link rel="stylesheet" href="style.css?v=8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css?v=9" />
 </head>
 <body>
-  <div class="app">
-    <header class="chat-header">
-      <button class="icon-btn back" type="button" aria-label="Wstecz" data-feature="Lista rozmów">
-        <svg viewBox="0 0 24 24"><path d="M15.4 4.6 8 12l7.4 7.4" /></svg>
-      </button>
-      <div class="avatar sm online" id="avatar"></div>
-      <div class="who">
-        <div class="name" id="name"></div>
-        <div class="status" id="status">Aktywna teraz</div>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn" type="button" aria-label="Połączenie głosowe" data-feature="Połączenia głosowe">
-          <svg viewBox="0 0 24 24"><path d="M6.6 3.5h2.6l1.5 4-2 1.4a11 11 0 0 0 6.4 6.4l1.4-2 4 1.5v2.6a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z" /></svg>
-        </button>
-        <button class="icon-btn" type="button" aria-label="Połączenie wideo" data-feature="Połączenia wideo">
-          <svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="13" height="12" rx="3" /><path d="m15.5 10.5 6-3.5v10l-6-3.5z" /></svg>
-        </button>
-      </div>
-    </header>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <a class="logo" href="./" data-home>
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><path d="M32 49S13 38 13 25c0-6.5 4.8-11 10.7-11 3.8 0 6.8 2 8.3 5 1.5-3 4.5-5 8.3-5C46.2 14 51 18.5 51 25 51 38 32 49 32 49Z" /></svg>
+        </span>
+        <span>
+          <strong class="logo-name" id="logo-name"></strong>
+          <small class="logo-sub" id="logo-sub"></small>
+        </span>
+      </a>
+      <nav class="nav">
+        <a href="#poznaj" data-section="poznaj">Poznaj osoby</a>
+        <a href="#online" data-section="online">Online</a>
+        <a href="#okolica" data-section="okolica">W okolicy</a>
+        <a href="#nowe" data-section="nowe">Nowe profile</a>
+        <button type="button" data-join="Zaloguj się">Zaloguj się</button>
+      </nav>
+      <button class="btn btn-primary btn-sm" type="button" data-join>Dołącz za darmo</button>
+    </div>
+  </header>
 
-    <main class="messages" id="messages" aria-live="polite">
-      <section class="intro">
-        <div class="avatar xl" id="intro-avatar"></div>
-        <h1 id="intro-name"></h1>
-        <p class="intro-sub">Macie nowe dopasowanie 💞</p>
-        <p class="intro-meta">Profil zweryfikowany · Aktywna teraz</p>
-      </section>
-      <div class="time-sep" id="time-sep"></div>
-    </main>
+  <div id="view"></div>
 
-    <footer class="bottom">
-      <form class="composer" id="composer" autocomplete="off">
-        <button class="icon-btn accent" type="button" aria-label="Dodaj" data-feature="Załączniki">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" /><path d="M12 8v8M8 12h8" /></svg>
-        </button>
-        <button class="icon-btn accent" type="button" aria-label="Zdjęcie" data-feature="Wysyłanie zdjęć">
-          <svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="3" /><circle cx="9" cy="10" r="1.8" /><path d="m21 16-5-5-9 8.5" /></svg>
-        </button>
-        <div class="field">
-          <input id="input" type="text" placeholder="Napisz wiadomość..." maxlength="500" enterkeyhint="send" />
-          <button class="icon-btn emoji" id="emoji" type="button" aria-label="Emoji">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" /><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0" /><circle cx="9" cy="10" r=".6" /><circle cx="15" cy="10" r=".6" /></svg>
-          </button>
-        </div>
-        <button class="send" type="submit" id="send" aria-label="Wyślij wiadomość" disabled>
-          <svg viewBox="0 0 24 24"><path d="M3.4 20.4 21 12 3.4 3.6l2.3 7.2L15 12l-9.3 1.2z" /></svg>
-        </button>
-      </form>
-
-      <div class="cta" id="cta" hidden>
-        <p class="cta-info" id="cta-info"></p>
-        <a class="cta-btn" id="cta-btn" href="#"></a>
-      </div>
-    </footer>
+  <div class="mobile-bar">
+    <button class="btn btn-primary" type="button" data-join>Poznaj kogoś w swojej okolicy</button>
   </div>
 
-  <div class="modal" id="modal" hidden>
-    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-      <div class="modal-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5" /><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3" /></svg>
-      </div>
-      <h2 id="modal-title"></h2>
-      <p id="modal-text"></p>
-      <a class="cta-btn" id="modal-btn" href="#"></a>
-      <button class="modal-close" id="modal-close" type="button">Nie teraz</button>
+  <div class="modal-root" id="modal" hidden>
+    <div class="backdrop" data-close></div>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-x" type="button" data-close aria-label="Zamknij">×</button>
+      <div class="eyebrow">Szybki start</div>
+      <h2 id="modal-title">Poznaj kogoś nowego</h2>
+      <p>Wybierz swój przedział wieku, żeby przejść dalej i zobaczyć dopasowane profile.</p>
+      <a class="age-btn age-young" id="age-young" href="#">Mam 18–45 lat</a>
+      <a class="age-btn age-old" id="age-old" href="#">Mam więcej niż 45 lat</a>
+      <p class="modal-note">Serwis wyłącznie dla osób pełnoletnich.</p>
     </div>
   </div>
 
-  <script src="config.js?v=8"></script>
-  <script src="age.js?v=8"></script>
-  <script src="app.js?v=8"></script>
+  <script src="config.js?v=9"></script>
+  <script src="app.js?v=9"></script>
 </body>
 </html>

@@ -1,94 +1,90 @@
 // ============================================================
 //  KONFIGURACJA – tu zmieniasz wszystko bez grzebania w kodzie
 // ============================================================
-window.CHAT_CONFIG = {
-  // Imię używane, gdy ktoś wejdzie na stronę główną (bez /imie).
-  defaultName: "Ola",
+window.SITE_CONFIG = {
+  // Logo: pierwsza część biała, druga w kolorze akcentu.
+  brand: ["randki", ".site"],
+  brandSub: "portal randkowy",
 
-  // Ile ms "pisze..." zanim pojawi się pierwsza wiadomość.
-  typingDelayMs: 1800,
+  // Okienko z wyborem wieku – każdy przycisk "Dołącz", "Zobacz profil",
+  // "Wyślij wiadomość" itd. otwiera to okienko.
+  linkYounger: "https://radarkobiet.pl/link/3107/37989837", // "Mam 18–45 lat"
+  linkOlder: "https://radarkobiet.pl/link/3806/37989837",   // "Mam więcej niż 45 lat"
 
-  // Pierwsze wiadomości – losowana jest jedna z listy.
-  // {imie} zostanie zamienione na imię z adresu (np. /karolina -> Karolina).
-  firstMessages: [
-    "Hejka, jestem {imie}, a ty? Ile masz lat 🙂?",
-    "Hej! Tu {imie} 😊 a ty jak masz na imię? Ile masz lat?",
-    "Cześć, jestem {imie} 🙂 a ty? Ile masz lat?",
-    "Hejka 😊 {imie} jestem, a ty? I ile masz lat?",
-    "Hej hej, jestem {imie} 🙈 jak masz na imię i ile masz lat?",
-    "Siemka, {imie} z tej strony 🙂 a ty? Ile lat masz?",
-    "Cześć 😊 mam na imię {imie}, a ty? Ile masz lat?",
-    "Hejka! Jestem {imie} 🙂 powiesz mi jak masz na imię i ile masz lat?",
-    "Hej, {imie} jestem 😊 a ty kim jesteś? Ile masz lat?",
-    "Cześć cześć, tu {imie} 🙂 a ty? Ile masz lat? 😉",
+  // Profile. Adres strony profilu to /<slug>, np. randki.site/karolina.
+  // Kolejność = kolejność na stronie głównej. isNew = plakietka "Nowa".
+  profiles: [
+    {
+      slug: "ola", name: "Ola", age: 27, photo: "img/ola.jpg", isNew: false,
+      bio: "Lubię długie rozmowy przy winie i facetów, którzy potrafią mnie rozśmieszyć 😊",
+      about: "Nie lubię pisać w nieskończoność. Jeśli od pierwszych wiadomości dobrze się dogadujemy, chętnie umówię się na kawę albo spacer.",
+      interests: ["Wino", "Spacery", "Seriale"],
+    },
+    {
+      slug: "karolina", name: "Karolina", age: 29, photo: "img/karolina.jpg", isNew: true,
+      bio: "Słońce, morze i spontaniczne wyjazdy. Szukam kogoś, kto spakuje się w 10 minut 😉",
+      about: "Jestem typem osoby, która w piątek wieczorem decyduje, że w sobotę jedzie nad morze. Fajnie byłoby mieć z kim.",
+      interests: ["Podróże", "Morze", "Spontaniczność"],
+    },
+    {
+      slug: "magda", name: "Magda", age: 31, photo: "img/magda.jpg", isNew: false,
+      bio: "Kawa, książki i dobre rozmowy. Inteligencja to dla mnie najlepszy flirt.",
+      about: "Na co dzień spokojna, ale przy dobrym towarzystwie robię się zaskakująco gadatliwa. Lubię facetów, którzy mają coś ciekawego do powiedzenia.",
+      interests: ["Kawa", "Książki", "Rozmowy"],
+    },
+    {
+      slug: "ania", name: "Ania", age: 26, photo: "img/ania.jpg", isNew: true,
+      bio: "Uśmiechnięta, pozytywna i ciekawa ludzi. Napisz, a sprawdzimy, czy zaiskrzy ✨",
+      about: "Wierzę, że od jednej dobrej rozmowy może się zacząć coś naprawdę fajnego. Szukam kogoś, z kim nie będzie nudno.",
+      interests: ["Muzyka", "Koncerty", "Randki"],
+    },
+    {
+      slug: "kasia", name: "Kasia", age: 24, photo: "img/kasia.jpg", isNew: true,
+      bio: "Nowa tutaj. Trochę nieśmiała, ale tylko na początku 🙈",
+      about: "Przy pierwszej wiadomości zwykle się stresuję, ale potem nie da się mnie zatrzymać. Doceniam facetów, którzy piszą pierwsi.",
+      interests: ["Filmy", "Gotowanie", "Flirt"],
+    },
+    {
+      slug: "natalia", name: "Natalia", age: 30, photo: "img/natalia.jpg", isNew: false,
+      bio: "Konkretna i z poczuciem humoru. Wolę jedno spotkanie niż sto wiadomości.",
+      about: "Mam swoje życie, pracę i pasje, ale brakuje mi kogoś, z kim mogłabym spędzać wieczory. Jeśli też masz dość samotnych weekendów, napisz.",
+      interests: ["Samochody", "Sport", "Wieczorne wyjścia"],
+    },
+    {
+      slug: "julia", name: "Julia", age: 28, photo: "img/julia.jpg", isNew: false,
+      bio: "Rude włosy, piegi i spory temperament. Uprzedzam lojalnie 😉",
+      about: "Lubię domowe wieczory, ale równie chętnie wyskoczę gdzieś spontanicznie. Najważniejsze, żeby było z kim się pośmiać.",
+      interests: ["Taniec", "Flirt", "Wieczory we dwoje"],
+    },
+    {
+      slug: "zuzia", name: "Zuzia", age: 25, photo: "img/zuzia.jpg", isNew: true,
+      bio: "Uwielbiam spacery po mieście i facetów, którzy wiedzą, czego chcą.",
+      about: "Nie szukam księcia z bajki. Wystarczy ktoś normalny, szczery i z inicjatywą. Resztę dogadamy przy kawie.",
+      interests: ["Miasto", "Kawa", "Randki"],
+    },
+    {
+      slug: "wiktoria", name: "Wiktoria", age: 33, photo: "img/wiktoria.jpg", isNew: false,
+      bio: "Dojrzała, spokojna, ale z iskrą w oku. Lubię mężczyzn z charakterem.",
+      about: "Wiem już, czego chcę, i nie lubię tracić czasu na gierki. Jeśli masz podobnie, możemy się szybko dogadać.",
+      interests: ["Natura", "Kolacje", "Chemia"],
+    },
   ],
 
-  // Po ilu ms wiadomość użytkownika dostaje "Odczytane" i niebieskie ✓✓.
-  readAfterMs: 3000,
-
-  // Ile ms ciszy czekamy na kolejne wiadomości użytkownika zanim odpiszemy
-  // (licznik startuje od nowa przy każdej wysłanej wiadomości i przy pisaniu).
-  quietMs: 8000,
-
-  // Ile ms "pisze..." przed odpowiedzią.
-  replyTypingMs: 1500,
-
-  // Odpowiedź po wiadomościach użytkownika. {wiek} = losowy wiek z zakresu
-  // poniżej, razem z poprawną odmianą ("20 lat", "22 lata").
-  replyMessage: "O fajnie, ja {wiek}",
-  ageMin: 20,
-  ageMax: 25,
-
-  // Druga wiadomość zaraz po odpowiedzi z wiekiem – losowana jedna z listy.
-  // Dopiero po niej pojawia się przycisk "Kontynuuj rozmowę".
-  followUpMessages: [
-    "Kogo szukasz 🙂 związek na poważnie?",
-    "A czego tu szukasz? Czegoś na poważnie czy luźno 😉?",
-    "Powiedz, szukasz związku czy raczej luźnej znajomości? 🙂",
-    "Kogo szukasz? Bo ja chyba kogoś na dłużej 🙈",
-    "A ty szukasz czegoś na poważnie? 🙂",
-    "Szukasz związku czy bardziej luźnego poznania się? 😊",
-    "Ciekawa jestem, kogo szukasz 🙂 ktoś na stałe?",
-    "Czego szukasz na portalu? Związku na poważnie? 🙂",
-  ],
-  followUpTypingMs: 2200,
-
-  // Po ilu ms od odpowiedzi pokazać przycisk "Kontynuuj rozmowę".
-  ctaDelayMs: 2000,
-  ctaInfo: "{imie} czeka na Twoją odpowiedź 💬",
-  ctaText: "Kontynuuj rozmowę",
-
-  // Link pod przyciskiem zależy od wieku wyłapanego z wiadomości użytkownika.
-  // Wiek >= ageThreshold -> linkOlder, młodszy albo nieznany -> linkYounger.
-  ageThreshold: 45,
-  linkOlder: "https://radarkobiet.pl/link/3806/37989837",
-  linkYounger: "https://radarkobiet.pl/link/3107/37989837",
-
-  // Okienko po kliknięciu ikon (kamera, telefon, zdjęcie, plus, wstecz).
-  // Przycisk w okienku zawsze prowadzi na featureLink.
-  featureText: "Ta funkcja będzie dostępna po przejściu do głównej wersji witryny.",
-  featureButton: "Przejdź do głównej wersji",
-  featureLink: "https://radarkobiet.pl/link/3107/37989837",
-
-  // Ustawienia dla konkretnych imion (klucz małymi literami).
-  // Pola: displayName, age, city, photo, firstMessages – wszystkie opcjonalne.
-  profiles: {
-    ola:      { photo: "img/ola.jpg" },
-    karolina: { photo: "img/karolina.jpg" },
-    magda:    { photo: "img/magda.jpg" },
-    ania:     { photo: "img/ania.jpg" },
-    kasia:    { photo: "img/kasia.jpg" },
-    natalia:  { photo: "img/natalia.jpg" },
-    julia:    { photo: "img/julia.jpg" },
-    zuzia:    { photo: "img/zuzia.jpg" },
-    wiktoria: { photo: "img/wiktoria.jpg" },
+  // Profil dla imion spoza listy (np. randki.site/ewa): zdjęcie, wiek i opis
+  // dobierane z poniższych pul – zawsze te same dla danego imienia.
+  fallback: {
+    ageMin: 23,
+    ageMax: 34,
+    bios: [
+      "Szukam kogoś, z kim rozmowa będzie się kleić od pierwszej wiadomości 😊",
+      "Lubię spontaniczne randki i facetów z poczuciem humoru.",
+      "Nowa w okolicy, chętnie poznam kogoś interesującego ✨",
+      "Wolę jedno dobre spotkanie niż tygodnie pisania 😉",
+    ],
+    abouts: [
+      "Nie lubię długo pisać – jeśli złapiemy dobry kontakt, chętnie umówię się na żywo.",
+      "Cenię szczerość, humor i inicjatywę. Napisz, a zobaczymy, czy zaiskrzy.",
+    ],
+    interests: [["Flirt", "Randki", "Kawa"], ["Spacery", "Muzyka", "Chemia"], ["Kino", "Podróże", "Wieczory we dwoje"]],
   },
-
-  // Imiona spoza listy powyżej dostają jedno z tych zdjęć
-  // (zawsze to samo dla danego imienia, np. /ewa zawsze ma to samo zdjęcie).
-  photos: [
-    "img/ola.jpg", "img/karolina.jpg", "img/magda.jpg",
-    "img/ania.jpg", "img/kasia.jpg", "img/natalia.jpg",
-    "img/julia.jpg", "img/zuzia.jpg", "img/wiktoria.jpg",
-  ],
 };
