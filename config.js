@@ -28,6 +28,12 @@ window.SITE_CONFIG = {
       interests: ["Siłownia", "Flirt", "Wieczorne wyjścia"],
     },
     {
+      slug: "daria", name: "Daria", age: 27, photo: "img/daria.jpg", isNew: true,
+      bio: "Lubię biel, koronki i facetów, którzy potrafią prawić komplementy 😘",
+      about: "Jestem kobieca i nie wstydzę się tego. Szukam mężczyzny pewnego siebie, który wie, jak zainteresować kobietę rozmową, zanim zaprosi ją na randkę.",
+      interests: ["Moda", "Flirt", "Romantyczne wieczory"],
+    },
+    {
       slug: "paulina", name: "Paulina", age: 29, photo: "img/paulina.jpg", isNew: true,
       bio: "Właśnie wróciłam z wakacji i szukam kogoś, z kim zaplanuję kolejne ☀️",
       about: "Opalenizna jeszcze trzyma, humor też. Lubię aktywnie spędzać czas, ale wieczory wolę spokojne – najlepiej we dwoje.",
@@ -62,6 +68,12 @@ window.SITE_CONFIG = {
       bio: "Długie włosy, krótkie spódniczki i jeszcze krótsza cierpliwość do nudy 😉",
       about: "Jestem tu od niedawna i ciekawi mnie, kto odważy się napisać pierwszy. Lubię facetów z humorem i inicjatywą.",
       interests: ["Taniec", "Flirt", "Spontaniczne randki"],
+    },
+    {
+      slug: "iwona", name: "Iwona", age: 38, photo: "img/iwona.jpg", isNew: true,
+      bio: "Lato nad jeziorem, zachody słońca i dobre towarzystwo. Dołączysz? ☀️",
+      about: "Mam swoje lata i swoje doświadczenia, ale wciąż lubię flirtować jak nastolatka. Szukam dojrzałego mężczyzny, z którym nie będzie nudno.",
+      interests: ["Jeziora", "Plaża", "Wino"],
     },
     {
       slug: "patrycja", name: "Patrycja", age: 28, photo: "img/patrycja.jpg", isNew: true,
