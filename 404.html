@@ -12,7 +12,11 @@
       var keep = /\.github\.io$/.test(location.hostname) && segs.length > 1 ? 1 : 0;
       var base = "/" + segs.slice(0, keep).join("/") + (keep ? "/" : "");
       var name = segs[keep] ? decodeURIComponent(segs[keep]) : "";
-      location.replace(base + (name ? "?imie=" + encodeURIComponent(name) : "") + location.hash);
+      // zachowujemy pozostałe parametry (np. ?wersja=2, utm_*, fbclid)
+      var q = new URLSearchParams(location.search);
+      if (name) q.set("imie", name);
+      var qs = q.toString();
+      location.replace(base + (qs ? "?" + qs : "") + location.hash);
     })();
   </script>
 </head>

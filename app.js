@@ -238,6 +238,7 @@
   var currentSlug = null;
 
   function render(slug) {
+    if (VARIANT === 2) return gatePage(slug);
     currentSlug = slug || "";
     document.body.classList.toggle("is-profile", !!slug);
     if (slug) profilePage(findProfile(slug));
@@ -258,6 +259,64 @@
   }
 
   window.addEventListener("popstate", function () { render(slugFromPath()); });
+
+  // ---------- test A/B ----------
+  function pickVariant() {
+    var forced = new URLSearchParams(location.search).get("wersja");
+    if (forced === "1" || forced === "2") return +forced;
+
+    var ab = cfg.abTest || {};
+    var key = "randki_variant";
+    var ttl = (ab.rememberHours || 1) * 3600 * 1000;
+    try {
+      var saved = JSON.parse(localStorage.getItem(key) || "null");
+      if (saved && (saved.v === 1 || saved.v === 2) && Date.now() - saved.t < ttl) return saved.v;
+    } catch (e) { /* brak dostępu do localStorage – losujemy przy każdym wejściu */ }
+
+    var v = Math.random() < (ab.version2Share == null ? 0.5 : ab.version2Share) ? 2 : 1;
+    try { localStorage.setItem(key, JSON.stringify({ v: v, t: Date.now() })); } catch (e) {}
+    return v;
+  }
+
+  var VARIANT = pickVariant();
+  document.documentElement.setAttribute("data-variant", VARIANT);
+
+  // ---------- wersja 2: siatka zdjęć z potwierdzeniem wieku ----------
+  function gatePage(slug) {
+    var g = cfg.gate || {};
+    var list = (g.photos || []).map(findProfile);
+    // wejście z linku z imieniem – ta osoba trafia na pierwsze miejsce
+    if (slug) {
+      var p = findProfile(slug);
+      list = [p].concat(list.filter(function (x) { return x.slug !== p.slug; }));
+    }
+    list = list.slice(0, 9);
+    document.title = (slug ? list[0].name + " i inne kobiety z okolicy" : "Kobiety z Twojej okolicy") + " | " + cfg.brand.join("");
+
+    view.innerHTML =
+      '<main class="gate wrap">' +
+        '<div class="gate-head">' +
+          '<div class="badge"><span class="live-dot"></span>' + (slug ? esc(list[0].name) + " jest teraz online" : "Aktywne profile w Twojej okolicy") + "</div>" +
+          "<h1>" + esc(g.title || "") + "</h1>" +
+          "<p>" + esc(g.text || "") + "</p>" +
+        "</div>" +
+        '<div class="gate-grid">' + list.map(function (p, i) {
+          var locked = i === list.length - 1;
+          return '<div class="gate-tile' + (locked ? " locked-tile" : "") + '">' +
+            '<img src="' + url(p.photo) + '" alt="' + (locked ? "" : esc(p.name) + ", " + p.age) + '"' + (i > 2 ? ' loading="lazy"' : "") + " />" +
+            (locked
+              ? '<div class="tile-lock"><span class="tile-lock-icon">🔒</span><span>+' + (40 + (hash(p.slug) % 60)) + " profili</span></div>"
+              : '<div class="shade"></div>' + onlinePill() + '<div class="tile-name">' + esc(p.name) + ", " + p.age + "</div>") +
+            "</div>";
+        }).join("") + "</div>" +
+        '<div class="gate-actions">' +
+          '<a class="btn btn-primary" href="' + esc(cfg.linkYounger) + '">' + esc(g.btnYounger || "") + "</a>" +
+          '<a class="btn btn-older" href="' + esc(cfg.linkOlder) + '">' + esc(g.btnOlder || "") + "</a>" +
+          '<a class="btn btn-leave" href="' + esc(g.leaveUrl || "https://www.google.com/") + '">' + esc(g.btnLeave || "") + "</a>" +
+        "</div>" +
+        '<p class="gate-note">Serwis wyłącznie dla osób pełnoletnich. Klikając, potwierdzasz, że masz ukończone 18 lat.</p>' +
+      "</main>";
+  }
 
   // ---------- okienko ----------
   function openModal(title) {
@@ -306,5 +365,5 @@
   document.getElementById("logo-name").innerHTML = esc(cfg.brand[0]) + "<span>" + esc(cfg.brand[1] || "") + "</span>";
   document.getElementById("logo-sub").textContent = cfg.brandSub || "";
   render(slugFromPath());
-  if (location.hash.length > 1) scrollToSection(location.hash.slice(1));
+  if (VARIANT === 1 && location.hash.length > 1) scrollToSection(location.hash.slice(1));
 })();

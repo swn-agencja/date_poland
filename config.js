@@ -11,6 +11,26 @@ window.SITE_CONFIG = {
   linkYounger: "https://radarkobiet.pl/link/3107/37989837", // "Mam 18–45 lat"
   linkOlder: "https://radarkobiet.pl/link/3806/37989837",   // "Mam więcej niż 45 lat"
 
+  // Test A/B: przy pierwszym wejściu losujemy wersję strony i pamiętamy ją
+  // w przeglądarce przez rememberHours godzin (klikanie i odświeżanie jej nie zmienia).
+  //   wersja 1 – portal z profilami,  wersja 2 – siatka zdjęć z potwierdzeniem wieku.
+  // Podgląd konkretnej wersji: randki.site/?wersja=1 lub ?wersja=2
+  abTest: {
+    version2Share: 0.5,   // 0.5 = 50% wejść na wersję 2; 0 = tylko wersja 1; 1 = tylko wersja 2
+    rememberHours: 1,
+  },
+
+  // Wersja 2: 8 widocznych zdjęć + 9. rozmyte z kłódką (slugi profili z listy poniżej).
+  gate: {
+    photos: ["klaudia", "sandra", "daria", "paulina", "nikola", "dominika", "weronika", "iwona", "monika"],
+    title: "Kobiety z Twojej okolicy są teraz online",
+    text: "Strona zawiera treści przeznaczone wyłącznie dla dorosłych. Potwierdź swój wiek, aby zobaczyć profile.",
+    btnYounger: "Potwierdzam, że mam 18 lat",
+    btnOlder: "Potwierdzam, że mam powyżej 45 lat",
+    btnLeave: "Opuść stronę",
+    leaveUrl: "https://www.google.com/",
+  },
+
   // Profile. Adres strony profilu to /<slug>, np. randki.site/karolina.
   // Kolejność = kolejność na stronie głównej. isNew = plakietka "Nowa".
   // photo = zdjęcie główne, photos = dodatkowe zdjęcia (pokazywane jako zablokowane miniatury).
