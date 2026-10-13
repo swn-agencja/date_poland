@@ -570,3 +570,4 @@ section { padding-top: 75px; }
   .invite-card h1 { font-size: 58px; }
   .invite-text { font-size: 32px; }
 }
+.invite-sub { margin: -8px 0 22px; color: var(--muted); font-size: 15px; line-height: 1.5; }

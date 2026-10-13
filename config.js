@@ -31,6 +31,7 @@ window.SITE_CONFIG = {
   invite: {
     defaultSlug: "kasia",   // co pokazuje randki.site/ (bez imienia)
     text: "{imie} zaprasza Cię do dołączenia do znajomych",
+    sub: "Po założeniu konta zostaniecie automatycznie połączeni",
     button: "Przejdź dalej",
     note: "Serwis wyłącznie dla osób pełnoletnich.",
   },

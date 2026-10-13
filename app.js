@@ -329,6 +329,7 @@
           "<h1>" + esc(p.name) + ", " + p.age + "</h1>" +
           '<div class="distance">' + distance(p.slug) + "</div>" +
           '<p class="invite-text">' + esc((inv.text || "{imie} zaprasza Cię do dołączenia do znajomych").replace(/\{imie\}/g, p.name)) + "</p>" +
+          (inv.sub ? '<p class="invite-sub">' + esc(inv.sub) + "</p>" : "") +
           '<button class="btn btn-primary btn-block" type="button" data-join="Wyświetl profil">' + esc(inv.button || "Przejdź dalej") + "</button>" +
           '<p class="invite-note">' + esc(inv.note || "") + "</p>" +
         "</div>" +
