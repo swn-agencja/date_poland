@@ -22,6 +22,12 @@ Zero frameworków i zero budowania – czysty HTML/CSS/JS.
 - `randki.site/<slug>` – profil z `config.js` (np. `/karolina`)
 - dowolne inne imię (np. `/ewa`) – profil składany automatycznie: zdjęcie, wiek i opis zawsze te same dla danego imienia
 
+## Tryb domyślny: strona zaproszenia
+
+Każde imię w adresie (`/kasia`, `/ania`, `/basia`…) pokazuje zdjęcie tej osoby, jej wiek i napis „<Imię> zaprasza Cię do dołączenia do znajomych”. Przycisk „Przejdź dalej” otwiera okienko z wyborem wieku (18–45 / 45+), które prowadzi na linki afiliacyjne. Strona główna `randki.site/` pokazuje osobę z `invite.defaultSlug`. Teksty: `invite` w `config.js`.
+
+Test A/B jest **wyłączony** (`abTest.enabled: false`), kod zostaje. Podgląd starych wersji: `?wersja=1` (portal) i `?wersja=2` (siatka 3×3); żeby znów losować, ustaw `abTest.enabled: true`.
+
 ## Test A/B – dwie wersje strony
 
 Przy pierwszym wejściu losowana jest wersja (domyślnie 50/50) i zapamiętywana w przeglądarce na godzinę – klikanie i odświeżanie jej nie zmienia.
