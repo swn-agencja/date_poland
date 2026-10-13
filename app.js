@@ -313,6 +313,16 @@
   }
 
   // ---------- wersja 3: strona zaproszenia (zdjęcie + zaproszenie od danej osoby) ----------
+  // "przesłała zaproszenie X minut temu" – X losowe z zakresu, z poprawną odmianą
+  function sentAgo() {
+    var inv = cfg.invite || {};
+    var min = inv.minutesMin || 2, max = inv.minutesMax || 60;
+    var n = min + Math.floor(Math.random() * (max - min + 1));
+    var d = n % 10, dd = n % 100;
+    var word = n === 1 ? "minutę" : d >= 2 && d <= 4 && (dd < 12 || dd > 14) ? "minuty" : "minut";
+    return (inv.sent || "przesłała zaproszenie {n} {minuty} temu").replace("{n}", n).replace("{minuty}", word);
+  }
+
   function invitePage(slug) {
     var inv = cfg.invite || {};
     var p = findProfile(slug || inv.defaultSlug || (PROFILES[0] && PROFILES[0].slug));
@@ -327,7 +337,7 @@
         '<div class="invite-card">' +
           '<div class="status"><span class="live-dot"></span>Online · aktywna teraz</div>' +
           "<h1>" + esc(p.name) + ", " + p.age + "</h1>" +
-          '<div class="distance">' + distance(p.slug) + "</div>" +
+          '<div class="distance">' + esc(sentAgo()) + "</div>" +
           '<p class="invite-text">' + esc((inv.text || "{imie} zaprasza Cię do dołączenia do znajomych").replace(/\{imie\}/g, p.name)) + "</p>" +
           (inv.sub ? '<p class="invite-sub">' + esc(inv.sub) + "</p>" : "") +
           '<button class="btn btn-primary btn-block" type="button" data-join="Wyświetl profil">' + esc(inv.button || "Przejdź dalej") + "</button>" +
