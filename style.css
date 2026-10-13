@@ -483,9 +483,14 @@ section { padding-top: 75px; }
 /* ---------- wersja 2: siatka z potwierdzeniem wieku ---------- */
 [data-variant="2"] .nav,
 [data-variant="2"] .topbar .btn-sm,
-[data-variant="2"] .mobile-bar { display: none; }
-[data-variant="2"] .topbar-inner { justify-content: center; }
-[data-variant="2"] body { padding-bottom: 0; }
+[data-variant="2"] .mobile-bar,
+[data-variant="3"] .nav,
+[data-variant="3"] .topbar .btn-sm,
+[data-variant="3"] .mobile-bar { display: none; }
+[data-variant="2"] .topbar-inner,
+[data-variant="3"] .topbar-inner { justify-content: center; }
+[data-variant="2"] body,
+[data-variant="3"] body { padding-bottom: 0; }
 
 .gate { max-width: 560px; padding: 28px 0 40px; text-align: center; }
 .gate-head h1 { font-family: var(--serif); font-size: clamp(30px, 6vw, 42px); line-height: 1.12; letter-spacing: -1px; margin: 16px 0 10px; }
@@ -543,4 +548,25 @@ section { padding-top: 75px; }
   .gate-head p { margin-left: 0; }
   .gate-actions { grid-area: actions; margin-top: 4px; }
   .gate-note { grid-area: note; }
+}
+
+
+/* ---------- wersja 3: strona zaproszenia ---------- */
+.invite { display: grid; gap: 22px; max-width: 520px; padding: 22px 0 40px; }
+.invite-photo { position: relative; overflow: hidden; border-radius: 24px; border: 1px solid var(--line); background: #222; box-shadow: var(--shadow); }
+.invite-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.invite-photo .pill-online { top: 14px; left: 14px; z-index: 1; }
+.invite-card { text-align: center; }
+.invite-card .status { justify-content: center; }
+.invite-card h1 { font-family: var(--serif); font-size: clamp(38px, 9vw, 52px); letter-spacing: -1.2px; margin: 8px 0 2px; }
+.invite-text { margin: 18px 0 22px; font-family: var(--serif); font-size: clamp(22px, 5.5vw, 28px); line-height: 1.25; }
+.invite-card .btn-block { min-height: 58px; margin-top: 0; font-size: 18px; animation: pulse 2s infinite; }
+.invite-note { margin: 14px 0 0; color: var(--muted2); font-size: 11.5px; }
+
+@media (min-width: 860px) {
+  .invite { max-width: 980px; grid-template-columns: 440px 1fr; gap: 56px; align-items: center; min-height: calc(100vh - 73px); padding: 30px 0; }
+  .invite-card { text-align: left; }
+  .invite-card .status { justify-content: flex-start; }
+  .invite-card h1 { font-size: 58px; }
+  .invite-text { font-size: 32px; }
 }

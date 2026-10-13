@@ -239,6 +239,7 @@
 
   function render(slug) {
     currentSlug = slug || "";
+    if (VARIANT === 3) { invitePage(slug); return trackPage(); }
     if (VARIANT === 2) { gatePage(slug); return trackPage(); }
     document.body.classList.toggle("is-profile", !!slug);
     if (slug) profilePage(findProfile(slug));
@@ -264,9 +265,11 @@
   // ---------- test A/B ----------
   function pickVariant() {
     var forced = new URLSearchParams(location.search).get("wersja");
-    if (forced === "1" || forced === "2") return +forced;
+    if (forced === "1" || forced === "2" || forced === "3") return +forced;
 
     var ab = cfg.abTest || {};
+    // test A/B wyłączony -> jedna strona zaproszenia (wersja 3)
+    if (ab.enabled === false) return 3;
     var key = "randki_variant";
     var ttl = (ab.rememberHours || 1) * 3600 * 1000;
     try {
@@ -307,6 +310,29 @@
 
   function trackPage() {
     track("page_view", { page_location: location.href, page_path: location.pathname, page_title: document.title });
+  }
+
+  // ---------- wersja 3: strona zaproszenia (zdjęcie + zaproszenie od danej osoby) ----------
+  function invitePage(slug) {
+    var inv = cfg.invite || {};
+    var p = findProfile(slug || inv.defaultSlug || (PROFILES[0] && PROFILES[0].slug));
+    currentSlug = p.slug;
+    document.title = p.name + " zaprasza Cię do znajomych | " + cfg.brand.join("");
+    view.innerHTML =
+      '<main class="invite wrap">' +
+        '<div class="invite-photo">' +
+          '<img src="' + url(p.photo) + '" alt="' + esc(p.name) + ", " + p.age + '" />' +
+          '<div class="shade"></div>' + onlinePill() +
+        "</div>" +
+        '<div class="invite-card">' +
+          '<div class="status"><span class="live-dot"></span>Online · aktywna teraz</div>' +
+          "<h1>" + esc(p.name) + ", " + p.age + "</h1>" +
+          '<div class="distance">' + distance(p.slug) + "</div>" +
+          '<p class="invite-text">' + esc((inv.text || "{imie} zaprasza Cię do dołączenia do znajomych").replace(/\{imie\}/g, p.name)) + "</p>" +
+          '<button class="btn btn-primary btn-block" type="button" data-join="Wyświetl profil">' + esc(inv.button || "Przejdź dalej") + "</button>" +
+          '<p class="invite-note">' + esc(inv.note || "") + "</p>" +
+        "</div>" +
+      "</main>";
   }
 
   // ---------- wersja 2: siatka zdjęć z potwierdzeniem wieku ----------

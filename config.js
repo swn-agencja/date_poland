@@ -27,7 +27,16 @@ window.SITE_CONFIG = {
     gaId: "G-VZSHFKGD2W",
   },
 
+  // Strona zaproszenia (tryb domyślny): /<imie> pokazuje zdjęcie tej osoby i zaproszenie.
+  invite: {
+    defaultSlug: "kasia",   // co pokazuje randki.site/ (bez imienia)
+    text: "{imie} zaprasza Cię do dołączenia do znajomych",
+    button: "Przejdź dalej",
+    note: "Serwis wyłącznie dla osób pełnoletnich.",
+  },
+
   abTest: {
+    enabled: false,       // false = jedna strona zaproszenia; true = losowanie wersji 1 / 2
     version2Share: 0.5,   // 0.5 = 50% wejść na wersję 2; 0 = tylko wersja 1; 1 = tylko wersja 2
     rememberHours: 1,
   },
@@ -47,6 +56,18 @@ window.SITE_CONFIG = {
   // Kolejność = kolejność na stronie głównej. isNew = plakietka "Nowa".
   // photo = zdjęcie główne, photos = dodatkowe zdjęcia (pokazywane jako zablokowane miniatury).
   profiles: [
+    {
+      slug: "kasia", name: "Kasia", age: 28, photo: "img/kasia.jpg", isNew: true,
+      bio: "Kolacja przy świecach, lampka wina i dobra rozmowa 🍷",
+      about: "Lubię eleganckie wieczory, ale równie chętnie spędzę czas w domu z kimś, przy kim mogę się odprężyć. Szukam kogoś, z kim będzie miło i bez presji.",
+      interests: ["Wino", "Kolacje", "Rozmowy"],
+    },
+    {
+      slug: "ania", name: "Ania", age: 26, photo: "img/ania.jpg", isNew: true,
+      bio: "Uśmiechnięta, pewna siebie i ciekawa nowych znajomości ✨",
+      about: "Wierzę, że od jednej dobrej rozmowy może się zacząć coś naprawdę fajnego. Szukam kogoś, z kim nie będzie nudno.",
+      interests: ["Moda", "Flirt", "Randki"],
+    },
     {
       slug: "klaudia", name: "Klaudia", age: 27, photo: "img/klaudia.jpg", isNew: true,
       bio: "Uśmiech to moja broń. Sprawdź, czy na Ciebie też zadziała 😉",
@@ -138,7 +159,7 @@ window.SITE_CONFIG = {
       interests: ["Wino", "Ogród", "Romantyczne wieczory"],
     },
     {
-      slug: "ania", name: "Ania", age: 26, photo: "img/ania.jpg", isNew: false,
+      slug: "gosia", name: "Gosia", age: 26, photo: "img/gosia.jpg", isNew: false,
       bio: "Uśmiechnięta, pozytywna i ciekawa ludzi. Napisz, a sprawdzimy, czy zaiskrzy ✨",
       about: "Wierzę, że od jednej dobrej rozmowy może się zacząć coś naprawdę fajnego. Szukam kogoś, z kim nie będzie nudno.",
       interests: ["Muzyka", "Koncerty", "Randki"],
@@ -156,7 +177,7 @@ window.SITE_CONFIG = {
       interests: ["Fitness", "Dyskrecja", "Wieczory we dwoje"],
     },
     {
-      slug: "kasia", name: "Kasia", age: 24, photo: "img/kasia.jpg", isNew: false,
+      slug: "basia", name: "Basia", age: 24, photo: "img/basia.jpg", isNew: false,
       bio: "Nowa tutaj. Trochę nieśmiała, ale tylko na początku 🙈",
       about: "Przy pierwszej wiadomości zwykle się stresuję, ale potem nie da się mnie zatrzymać. Doceniam facetów, którzy piszą pierwsi.",
       interests: ["Filmy", "Gotowanie", "Flirt"],
