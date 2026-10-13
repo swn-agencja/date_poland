@@ -8,7 +8,13 @@ window.SITE_CONFIG = {
 
   // Okienko z wyborem wieku – każdy przycisk "Dołącz", "Zobacz profil",
   // "Wyślij wiadomość" itd. otwiera to okienko.
-  linkYounger: "https://radarkobiet.pl/link/3107/37989837", // "Mam 18–45 lat"
+  // "Mam 18–45 lat" – przy każdym kliknięciu losowany jest jeden link z listy
+  linkYounger: [
+    "https://radarkobiet.pl/link/3107/37989837",
+    "https://radarkobiet.pl/link/3115/37989837",
+    "https://randkuj.xyz/link/2908/37989837",
+    "https://radarkobiet.pl/link/2898/37989837",
+  ],
   linkOlder: "https://radarkobiet.pl/link/3806/37989837",   // "Mam więcej niż 45 lat"
 
   // Test A/B: przy pierwszym wejściu losujemy wersję strony i pamiętamy ją

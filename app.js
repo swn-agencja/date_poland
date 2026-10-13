@@ -310,7 +310,7 @@
             "</div>";
         }).join("") + "</div>" +
         '<div class="gate-actions">' +
-          '<a class="btn btn-primary" href="' + esc(cfg.linkYounger) + '">' + esc(g.btnYounger || "") + "</a>" +
+          '<a class="btn btn-primary" data-younger href="' + esc(youngerLink()) + '">' + esc(g.btnYounger || "") + "</a>" +
           '<a class="btn btn-older" href="' + esc(cfg.linkOlder) + '">' + esc(g.btnOlder || "") + "</a>" +
           '<a class="btn btn-leave" href="' + esc(g.leaveUrl || "https://www.google.com/") + '">' + esc(g.btnLeave || "") + "</a>" +
         "</div>" +
@@ -330,7 +330,18 @@
     document.body.style.overflow = "";
   }
 
-  document.getElementById("age-young").href = cfg.linkYounger;
+  // link "18–45" losowany przy każdym kliknięciu
+  function youngerLink() {
+    var l = [].concat(cfg.linkYounger || []).filter(Boolean);
+    return l[Math.floor(Math.random() * l.length)] || "#";
+  }
+  var ageYoung = document.getElementById("age-young");
+  ageYoung.setAttribute("data-younger", "");
+  ageYoung.href = youngerLink();
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("[data-younger]");
+    if (a) a.href = youngerLink();
+  }, true);
   document.getElementById("age-old").href = cfg.linkOlder;
 
   // ---------- kliknięcia ----------
