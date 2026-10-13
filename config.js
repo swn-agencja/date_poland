@@ -24,7 +24,7 @@ window.SITE_CONFIG = {
   // Statystyki: identyfikator Google Analytics 4 (np. "G-AB12CD34EF").
   // Pusty = statystyki wyłączone.
   analytics: {
-    gaId: "",
+    gaId: "G-VZSHFKGD2W",
   },
 
   abTest: {
