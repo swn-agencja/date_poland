@@ -31,6 +31,20 @@ Przy pierwszym wejściu losowana jest wersja (domyślnie 50/50) i zapamiętywana
 
 Ustawienia: `abTest` i `gate` w `config.js`. Podgląd konkretnej wersji: `randki.site/?wersja=1` albo `?wersja=2`.
 
+## Statystyki (Google Analytics 4)
+
+Wpisz identyfikator (`G-...`) w `config.js` → `analytics.gaId`. Strona wysyła:
+
+| Zdarzenie | Kiedy |
+|---|---|
+| `page_view` | każde wejście i przejście na stronę główną / profil (z parametrem `profil`) |
+| `okienko_wieku` | otwarcie okienka z wyborem wieku |
+| `klik_18_45` | kliknięcie „18–45” (parametr `link_url` = wylosowany link) |
+| `klik_45_plus` | kliknięcie „45+” |
+| `opusc_strone` | „Opuść stronę” w wersji 2 |
+
+Każde zdarzenie ma parametr `wersja` (`v1` / `v2`) do porównania testu A/B.
+
 ## Okienko „Szybki start”
 
 - „Mam 18–45 lat” → losowo jeden z linków z listy `linkYounger`
@@ -45,4 +59,4 @@ python3 -m http.server 8000
 
 ## Aktualizacje a pamięć przeglądarki
 
-GitHub Pages pozwala przeglądarkom trzymać pliki do 10 minut. Po każdej zmianie w `style.css`, `config.js` lub `app.js` podbij numer `?v=` w `index.html` (np. `?v=17` → `?v=18`), wtedy nowa wersja wczyta się od razu. Do podglądu: Ctrl+Shift+R albo okno incognito.
+GitHub Pages pozwala przeglądarkom trzymać pliki do 10 minut. Po każdej zmianie w `style.css`, `config.js` lub `app.js` podbij numer `?v=` w `index.html` (np. `?v=18` → `?v=19`), wtedy nowa wersja wczyta się od razu. Do podglądu: Ctrl+Shift+R albo okno incognito.

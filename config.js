@@ -21,6 +21,12 @@ window.SITE_CONFIG = {
   // w przeglądarce przez rememberHours godzin (klikanie i odświeżanie jej nie zmienia).
   //   wersja 1 – portal z profilami,  wersja 2 – siatka zdjęć z potwierdzeniem wieku.
   // Podgląd konkretnej wersji: randki.site/?wersja=1 lub ?wersja=2
+  // Statystyki: identyfikator Google Analytics 4 (np. "G-AB12CD34EF").
+  // Pusty = statystyki wyłączone.
+  analytics: {
+    gaId: "",
+  },
+
   abTest: {
     version2Share: 0.5,   // 0.5 = 50% wejść na wersję 2; 0 = tylko wersja 1; 1 = tylko wersja 2
     rememberHours: 1,

@@ -238,11 +238,12 @@
   var currentSlug = null;
 
   function render(slug) {
-    if (VARIANT === 2) return gatePage(slug);
     currentSlug = slug || "";
+    if (VARIANT === 2) { gatePage(slug); return trackPage(); }
     document.body.classList.toggle("is-profile", !!slug);
     if (slug) profilePage(findProfile(slug));
     else home();
+    trackPage();
   }
 
   function go(slug, sectionId) {
@@ -280,6 +281,33 @@
 
   var VARIANT = pickVariant();
   document.documentElement.setAttribute("data-variant", VARIANT);
+
+  // ---------- statystyki (Google Analytics 4) ----------
+  var GA_ID = (cfg.analytics || {}).gaId;
+  if (GA_ID) {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    // page_view wysyłamy sami przy każdej zmianie widoku (nawigacja bez przeładowania)
+    window.gtag("config", GA_ID, { send_page_view: false, wersja: "v" + VARIANT });
+    window.gtag("set", "user_properties", { wersja: "v" + VARIANT });
+    var gs = document.createElement("script");
+    gs.async = true;
+    gs.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(GA_ID);
+    document.head.appendChild(gs);
+  }
+
+  function track(name, params) {
+    if (!GA_ID || !window.gtag) return;
+    params = params || {};
+    params.wersja = "v" + VARIANT;
+    if (currentSlug) params.profil = currentSlug;
+    window.gtag("event", name, params);
+  }
+
+  function trackPage() {
+    track("page_view", { page_location: location.href, page_path: location.pathname, page_title: document.title });
+  }
 
   // ---------- wersja 2: siatka zdjęć z potwierdzeniem wieku ----------
   function gatePage(slug) {
@@ -320,6 +348,7 @@
 
   // ---------- okienko ----------
   function openModal(title) {
+    track("okienko_wieku", { tytul: title || "Wyświetl profil" });
     document.getElementById("modal-title").textContent = title || "Wyświetl profil";
     modal.hidden = false;
     document.body.style.overflow = "hidden";
@@ -341,6 +370,13 @@
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest("[data-younger]");
     if (a) a.href = youngerLink();
+
+    // kliknięcia w linki wyjściowe
+    var out = e.target.closest && e.target.closest("[data-younger], #age-old, .btn-older, .btn-leave");
+    if (out) {
+      var name = out.hasAttribute("data-younger") ? "klik_18_45" : out.classList.contains("btn-leave") ? "opusc_strone" : "klik_45_plus";
+      track(name, { link_url: out.href, transport_type: "beacon" });
+    }
   }, true);
   document.getElementById("age-old").href = cfg.linkOlder;
 
