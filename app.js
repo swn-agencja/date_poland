@@ -320,7 +320,7 @@
 
   // ---------- okienko ----------
   function openModal(title) {
-    document.getElementById("modal-title").textContent = title || "Poznaj kogoś nowego";
+    document.getElementById("modal-title").textContent = title || "Wyświetl profil";
     modal.hidden = false;
     document.body.style.overflow = "hidden";
   }
