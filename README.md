@@ -63,6 +63,20 @@ python3 -m http.server 8000
 # otwórz http://localhost:8000/?imie=karolina
 ```
 
-## Aktualizacje a pamięć przeglądarki
+## Podgląd linku (Open Graph) – Facebook, Messenger
 
-GitHub Pages pozwala przeglądarkom trzymać pliki do 10 minut. Po każdej zmianie w `style.css`, `config.js` lub `app.js` podbij numer `?v=` w `index.html` (np. `?v=23` → `?v=24`), wtedy nowa wersja wczyta się od razu. Do podglądu: Ctrl+Shift+R albo okno incognito.
+Roboty Facebooka nie wykonują JavaScriptu, a GitHub Pages nie ma serwera, więc każda bohaterka z `config.js` ma własny plik HTML z tagami `og:*` w treści (`ania.html` → `randki.site/ania`) oraz obraz podglądu `og/ania.jpg` (1200×630, zdjęcie bez rozciągania na rozmytym tle). Teksty podglądu: `og` w `config.js` (`{imie}`, `{wiek}`).
+
+**Pliki `<imie>.html`, `og/*.jpg` oraz tagi w `index.html` są generowane – nie edytuj ich ręcznie.**
+
+Po dodaniu / zmianie bohaterki w `config.js` (albo zmianie zdjęcia, `index.html`, `app.js`, `style.css`) uruchom:
+
+```bash
+python3 tools/build.py      # wymaga: python3, Pillow, node
+```
+
+Ten sam skrypt odpala się sam na GitHubie (`.github/workflows/og.yml`) po każdym pushu i dopisuje wygenerowane pliki. Skrypt podbija też numery wersji plików (`?v=...`) na podstawie ich zawartości, więc nie trzeba tego robić ręcznie.
+
+Imiona spoza listy (np. `/ewa`) nadal działają przez `404.html` i nie mają własnego podglądu.
+
+**Odświeżenie podglądu na Facebooku:** https://developers.facebook.com/tools/debug/ → wklej `https://randki.site/ania` → **Debuguj** → **Zeskanuj ponownie** (Scrape Again). Zrób to po każdej zmianie zdjęcia lub tekstu, bo Facebook trzyma stary podgląd w pamięci.

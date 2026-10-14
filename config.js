@@ -27,6 +27,14 @@ window.SITE_CONFIG = {
     gaId: "G-VZSHFKGD2W",
   },
 
+  // Podgląd linku (Open Graph) generowany do HTML-a przez tools/build.py – patrz README.
+  // {imie} i {wiek} są podstawiane z danych bohaterki.
+  og: {
+    siteName: "randki.site",
+    title: "{imie} zaprasza Cię do dołączenia do znajomych",
+    description: "{imie}, {wiek} lat, przesłała Ci zaproszenie. Po założeniu konta zostaniecie automatycznie połączeni.",
+  },
+
   // Strona zaproszenia (tryb domyślny): /<imie> pokazuje zdjęcie tej osoby i zaproszenie.
   invite: {
     defaultSlug: "kasia",   // co pokazuje randki.site/ (bez imienia)

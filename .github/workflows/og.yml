@@ -1,0 +1,36 @@
+# Po każdej zmianie config.js / zdjęć / szablonu generuje strony bohaterek z podglądem
+# Open Graph (tools/build.py) i dopisuje je do repozytorium.
+name: Generate Open Graph pages
+
+on:
+  push:
+    paths:
+      - config.js
+      - index.html
+      - app.js
+      - style.css
+      - CNAME
+      - img/**
+      - tools/build.py
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: pip install pillow
+      - run: python3 tools/build.py
+      - name: Commit generated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m "Regenerate Open Graph pages [skip ci]"
+          git push
